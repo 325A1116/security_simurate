@@ -1,0 +1,6 @@
+{
+  "name": "CYBERSHIELD COMMAND - 実戦型サイバー防衛・インシデント訓練プラットフォーム",
+  "description": "実務的なインシデント対応シミュレーションゲーム、被害状況に応じた分岐シナリオ型訓練モード、脆弱性診断、最新脅威トレンド、クイズ、暗号学的パスワード生成ツールを統合した情報セキュリティ演習スイート。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
